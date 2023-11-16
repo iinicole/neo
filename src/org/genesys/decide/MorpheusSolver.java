@@ -478,11 +478,11 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
 //                    root = true;
 //                if (ast_.t0.children.get(0).id == node_id)
 //                    root = true;
-                // if (!nameNodes_.containsKey(id)) { // TODO: Nicole
-                //     // System.out.println("id = " + id);
-                //     // System.out.println("nameNodes_ = " + nameNodes_);
-                //     continue;
-                // }
+                if (!nameNodes_.containsKey(id)) { // TODO: Nicole
+                    // System.out.println("id = " + id);
+                    // System.out.println("nameNodes_ = " + nameNodes_);
+                    continue;
+                }
                 assert (nameNodes_.containsKey(id));
                 clause.t0.push(-nameNodes_.get(id));
                 clause.t1.add(id);
