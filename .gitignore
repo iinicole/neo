@@ -9,3 +9,7 @@ sat4j
 genesys.jar
 classes/*
 model/tmp
+out.txt
+.vscode
+armlib
+.DS_Store
