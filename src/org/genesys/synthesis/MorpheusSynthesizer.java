@@ -76,6 +76,7 @@ public class MorpheusSynthesizer implements Synthesizer {
 
     public MorpheusSynthesizer(Grammar grammar, Problem problem, Checker checker, Interpreter interpreter, int depth, String specLoc, boolean learning, Decider decider) {
         learning_ = learning;
+        System.out.println("GRAMMAR" + grammar.getProductions());
         solver_ = new MorpheusSolver(grammar, depth, decider, learning);
         checker_ = checker;
         interpreter_ = interpreter;
@@ -113,6 +114,7 @@ public class MorpheusSynthesizer implements Synthesizer {
         //Set<String> coreAst_ = new HashSet<>();
 
         while (ast != null) {
+            // System.out.println("THIS IS AST: " + ast);
             /* do deduction */
             total++;
             if (solver_.isPartial()) partial++;
@@ -150,6 +152,8 @@ public class MorpheusSynthesizer implements Synthesizer {
                             coreCache_.add(conflictsType.toString());
                         }
                     } else {
+                        // ALWAYS GOES HERE
+                        // System.out.println("conflicts: " + conflicts);
                         if (conflicts.isEmpty()) {
                             astPair = solver_.getModel(null, true);
                             if (astPair == null) break;
@@ -239,15 +243,17 @@ public class MorpheusSynthesizer implements Synthesizer {
             // Always one output table
             Object output = LibUtils.fixGsonBug(example.getOutput());
             try {
+                // System.out.println("input: " + input);
+                // System.out.println("PROGRAM: " + program);
                 Maybe<Object> tgt = interpreter_.execute(program, input);
                 if (tgt == null) {
                     passed = false;
                     break;
                 }
 
-//                System.out.println("result target:\n" + ((SimpleDataFrame)tgt.get()).getCols());
+            //    System.out.println("result target:\n" + ((SimpleDataFrame)tgt.get()).getCols());
 //                Extensions.print((SimpleDataFrame)tgt.get());
-//                System.out.println("expected target:\n" + ((SimpleDataFrame)output).getCols());
+            //    System.out.println("expected target:\n" + ((SimpleDataFrame)output).getCols());
 //                Extensions.print((SimpleDataFrame)output);
 
                 if (output instanceof DataFrame) {

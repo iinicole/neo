@@ -60,6 +60,12 @@ public class DeepCoderInterpreter extends BaseInterpreter {
                 new Maybe<>(new MapLList((Unop) objects.get(1)).apply(objects.get(0)))
         );
 
+        executors.put("MAP-HEAD", (objects, input) ->
+                new Maybe<>(new MapLList((Unop)new HeadUnop()).apply(objects.get(0)))
+        );
+
+        executors.put("GROUP", (objects, input) -> new Maybe<>(new GroupUnop().apply(objects.get(0))));
+
         executors.put("MAP-MUL", (objects, input) ->
                 new Maybe<>(new MapLList((Unop)new PrimitiveUnop("*", objects.get(1))).apply(objects.get(0)))
         );

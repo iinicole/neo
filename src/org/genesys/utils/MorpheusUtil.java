@@ -214,9 +214,10 @@ public class MorpheusUtil {
         if (obj instanceof Integer)
             return (Integer) obj;
         else if (obj instanceof List) {
-            List aList = (List) obj;
+            List aList = getFlatList(obj);
             assert !aList.isEmpty();
             int maxIndex = aList.indexOf(Collections.max(aList));
+            
             return (int) aList.get(maxIndex);
         } else {
             throw new UnsupportedOperationException("Invalid obj." + obj.getClass());
@@ -224,11 +225,25 @@ public class MorpheusUtil {
 
     }
 
+    private List getFlatList(Object obj) {
+        assert obj instanceof List;
+        List aList = (List) obj;
+        List flatList = new ArrayList();
+        for (Object o : aList) {
+            if (o instanceof List) {
+                flatList.addAll(getFlatList(o));
+            } else {
+                flatList.add(o);
+            }
+        }
+        return flatList;
+    }
+
     public int getMin(Object obj) {
         if (obj instanceof Integer)
             return (Integer) obj;
         else if (obj instanceof List) {
-            List aList = (List) obj;
+            List aList = getFlatList(obj);
             assert !aList.isEmpty();
             int minIndex = aList.indexOf(Collections.min(aList));
             return (int) aList.get(minIndex);
@@ -241,7 +256,7 @@ public class MorpheusUtil {
         if (obj instanceof Integer)
             return (Integer) obj;
         else if (obj instanceof List) {
-            List aList = (List) obj;
+            List aList = getFlatList(obj);
             assert !aList.isEmpty();
             return (int) aList.get(0);
         } else {
@@ -253,7 +268,7 @@ public class MorpheusUtil {
         if (obj instanceof Integer)
             return (Integer) obj;
         else if (obj instanceof List) {
-            List aList = (List) obj;
+            List aList = getFlatList(obj);
             assert !aList.isEmpty();
             int e = (int) aList.get(aList.size() - 1);
             return e;

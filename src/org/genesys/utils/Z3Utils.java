@@ -427,6 +427,7 @@ public class Z3Utils {
         Set<String> constraints = new HashSet<>();
         Set<String> types = new HashSet<>();
         for (Component comp : components) {
+            // System.out.println("COMP: " + comp);
             constraints.addAll(comp.getConstraint());
             types.add(comp.getType());
         }

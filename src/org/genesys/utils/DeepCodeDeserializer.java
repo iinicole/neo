@@ -53,8 +53,13 @@ public class DeepCodeDeserializer implements JsonDeserializer<Problem> {
     private List parseJson(JsonElement json) {
         List list = new ArrayList();
         for (JsonElement o : json.getAsJsonArray()) {
-            Number num = o.getAsNumber();
-            list.add(num.intValue());
+            if (o.isJsonArray()) {
+                list.add(parseJson(o));
+            }
+            else{
+                Number num = o.getAsNumber();
+                list.add(num.intValue());
+            }
         }
         return list;
     }

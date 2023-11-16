@@ -34,20 +34,30 @@ public class DeepCoderGrammar implements Grammar<AbstractType> {
         for (int i = 0; i < input.size(); i++) {
             Object elem = input.get(i);
             InputType in;
-            if (elem instanceof List)
-                in = new InputType(i, new ListType(new IntType()));
-            else
-                in = new InputType(i, new IntType());
+            in = new InputType(i, getType(elem));
+            // if (elem instanceof List)
+            //     in = new InputType(i, new ListType(new IntType()));
+            // else
+            //     in = new InputType(i, new IntType());
 
         /* dynamically add input to grammar. */
             addInput(in);
         }
         Object output = example.getOutput();
-        //output is either an integer or list.
-        if (output instanceof List) {
-            this.outputType = new ListType(new IntType());
+        this.outputType = getType(output);
+        System.out.println("inputTypes: " + this.inputTypes);
+        System.out.println("outputType: " + this.outputType);
+    }
+
+    private AbstractType getType(Object obj) {
+        if (obj instanceof List) {
+            // if no element throw error
+            if (((List) obj).isEmpty()) {
+                throw new RuntimeException("Empty list");
+            }
+            return new ListType(getType((Object)((List)obj).toArray()[0]));
         } else {
-            this.outputType = new IntType();
+            return new IntType();
         }
     }
 
@@ -135,6 +145,10 @@ public class DeepCoderGrammar implements Grammar<AbstractType> {
         productions.add(new Production<>(true,id++,new ListType(new IntType()), "MAP-DIV", new ListType(new IntType()), new ConstNotZeroType()));
         productions.add(new Production<>(true,id++,new ListType(new IntType()), "MAP-PLUS", new ListType(new IntType()), new ConstType()));
         productions.add(new Production<>(true,id++,new ListType(new IntType()), "MAP-POW", new ListType(new IntType()), new ConstPosType()));
+
+        // temp testing
+        productions.add(new Production<>(true,id++,new ListType(new IntType()), "MAP-HEAD", new ListType(new ListType(new IntType()))));
+        productions.add(new Production<>(true,id++,new ListType(new ListType(new IntType())), "GROUP", new ListType(new IntType())));
 
         productions.add(new Production<>(true,id++,new ListType(new IntType()), "FILTER", new ListType(new IntType()), new BinopBoolType(),new ConstType()));
 

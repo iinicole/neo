@@ -21,6 +21,7 @@ public class BaseInterpreter implements Interpreter<Node, Object> {
 
     @Override
     public Maybe<Object> execute(Node node, Object input) {
+        System.out.println("try to execute " + node + " on input " + input);
         List<Object> arglist = new ArrayList<>();
 
         for (Node child : node.children) {
@@ -55,7 +56,10 @@ public class BaseInterpreter implements Interpreter<Node, Object> {
             }
             return m;
         } else {
-            return this.executors.get(node.function).execute(arglist, input);
+            Maybe<Object> res = this.executors.get(node.function).execute(arglist, input);
+            System.out.println(node.function + "(" + arglist + ") = " + res);
+            System.out.println("GOOD try to execute " + node + " on input " + input);
+            return res;
         }
     }
 

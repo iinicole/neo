@@ -378,6 +378,13 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
     }
 
     private void GeneratePermutations(List<List<String>> Lists, List<List<String>> result, int depth, List<String> current) {
+        // if (depth == 0) {
+        //     System.out.println("GeneratePermutations");
+        //     System.out.println(Lists);
+        //     System.out.println(result);
+        //     System.out.println(nameNodes_);
+        // }
+
         if(depth == Lists.size())
         {
             result.add(current);
@@ -471,6 +478,11 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
 //                    root = true;
 //                if (ast_.t0.children.get(0).id == node_id)
 //                    root = true;
+                // if (!nameNodes_.containsKey(id)) { // TODO: Nicole
+                //     // System.out.println("id = " + id);
+                //     // System.out.println("nameNodes_ = " + nameNodes_);
+                //     continue;
+                // }
                 assert (nameNodes_.containsKey(id));
                 clause.t0.push(-nameNodes_.get(id));
                 clause.t1.add(id);
@@ -679,6 +691,7 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
 
     private void initDataStructures() {
 
+        // System.out.println("domainFirst_: " + domainFirst_);
         // Each line has its own subtree
         for (int i = 0; i < maxLen_; i++){
             Node node = null;
@@ -693,6 +706,8 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
             else node = createNode(domainHigher_,domain);
 
             createVariables(node);
+            // System.out.println("Node: " + node);
+            // System.out.println("nameNOdes_: " + nameNodes_);
 
             loc_.add(node);
             highTrail_.add(new Pair<Node, Integer>(node,highTrail_.size()+1));
@@ -714,7 +729,8 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
     }
 
     private void buildSATFormula() {
-
+        System.out.println("varNodes: " + varNodes_);
+        System.out.println("nameNodes_: " + nameNodes_);
         boolean conflict = false;
 
         // If a production is used in a parent node then this implies restrictions on the children
@@ -1157,7 +1173,7 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
             if (prod.inputs.length > maxChildren_)
                 maxChildren_ = prod.inputs.length;
 
-            if (prod.function.startsWith("line"))
+            if (prod.function.startsWith("line")) 
                 continue;
 
             domainProductions_.add(prod);
@@ -1181,13 +1197,15 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
     }
 
     private <T> void createVariables(Node node) {
-
+        // System.out.println("createVariables");
+        // System.out.println("Node: " + node + " domain: " + node.domain + " childsize: " + node.children.size());
         for (Production p : node.domain) {
             Pair<Integer, Production> pair = new Pair<Integer, Production>(node.id, p);
             Pair<Integer, String> pair2 = new Pair<Integer, String>(node.id, p.function);
             varNodes_.put(pair, ++nbVariables_);
             nameNodes_.put(pair2,nbVariables_);
-//            System.out.println("pair2 = " + pair2);
+        //     System.out.println("pair1 = " + pair);
+        //    System.out.println("pair2 = " + pair2);
             if (p.higher) {
                 if (!higherGrouping_.containsKey(p.function)) {
                     higherGrouping_.put(p.function, new ArrayList<>());
@@ -1394,6 +1412,12 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
             }
         }
 
+        if (false) {
+            System.out.println("node: " + node);
+            System.out.println("DecideMap: " + decideMap);
+            System.out.println("DecideDomain: " + decideDomain);
+        }
+        
         if (!decideDomain.isEmpty()) {
             String decision = nextDecisionHigher(decideDomain);
             if (decision == null){
@@ -1442,6 +1466,8 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
             }
 //            long e = LibUtils.tick();
 //            decideTime_ += LibUtils.computeTime(s,e);
+            // System.out.println("trail: " + trail_);
+            // System.out.println("decided node: " + node);
             return node;
         }
     }
@@ -1859,64 +1885,64 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
 
     }
 
-    public void printSketches() {
+    // public void printSketches() {
 
-        boolean unsat = false;
-        while (!unsat) {
-            while (level_ < highTrail_.size()) {
+    //     boolean unsat = false;
+    //     while (!unsat) {
+    //         while (level_ < highTrail_.size()) {
 
-                if (unsat) break;
+    //             if (unsat) break;
 
-                //long s = LibUtils.tick();
-                Constr conflict = satUtils_.propagate();
-                //long e = LibUtils.tick();
-                //propagateTime_ += LibUtils.computeTime(s,e);
-                if (conflict != null) {
-                    int backjumpLevel = satUtils_.analyzeSATConflict(conflict);
-                    int neoLevel = convertLevelFromSATtoNeo(backjumpLevel);
-                    if (backjumpLevel == -1) {
-                        unsat = true;
-                        break;
-                    } else backtrackStep1(neoLevel, false);
-                } else {
-                    // No conflict
-                    Node decision = decideHigh();
-                    if (decision == null) {
-                        if (level_ == 0) {
-                            unsat = true;
-                            break;
-                        }
+    //             //long s = LibUtils.tick();
+    //             Constr conflict = satUtils_.propagate();
+    //             //long e = LibUtils.tick();
+    //             //propagateTime_ += LibUtils.computeTime(s,e);
+    //             if (conflict != null) {
+    //                 int backjumpLevel = satUtils_.analyzeSATConflict(conflict);
+    //                 int neoLevel = convertLevelFromSATtoNeo(backjumpLevel);
+    //                 if (backjumpLevel == -1) {
+    //                     unsat = true;
+    //                     break;
+    //                 } else backtrackStep1(neoLevel, false);
+    //             } else {
+    //                 // No conflict
+    //                 Node decision = decideHigh();
+    //                 if (decision == null) {
+    //                     if (level_ == 0) {
+    //                         unsat = true;
+    //                         break;
+    //                     }
 
-                        while (backtrackStep1(level_ - 1, true)) {
-                            if (level_ == 0) {
-                                unsat = true;
-                                break;
-                            }
-                        }
-                    }
+    //                     while (backtrackStep1(level_ - 1, true)) {
+    //                         if (level_ == 0) {
+    //                             unsat = true;
+    //                             break;
+    //                         }
+    //                     }
+    //                 }
 
-                }
-            }
+    //             }
+    //         }
 
-            if (unsat) {
-                System.out.println("s NO SOLUTION");
-                break;
-            }
+    //         if (unsat) {
+    //             System.out.println("s NO SOLUTION");
+    //             break;
+    //         }
 
-            step_ = 2;
+    //         step_ = 2;
 
-            String sketch = "";
-            for (int i = 0; i < highTrail_.size(); i++) {
-                assert (highTrail_.get(i).t0.function != "");
-                sketch += highTrail_.get(i).t0.function + " ";
-            }
-            if (!sketches_.containsKey(sketch)) {
-                sketches_.put(sketch, true);
-                System.out.println("Sketch #" + sketches_.size() + ": " + sketch);
-            }
-            unsat = blockModel();
-        }
-    }
+    //         String sketch = "";
+    //         for (int i = 0; i < highTrail_.size(); i++) {
+    //             assert (highTrail_.get(i).t0.function != "");
+    //             sketch += highTrail_.get(i).t0.function + " ";
+    //         }
+    //         if (!sketches_.containsKey(sketch)) {
+    //             sketches_.put(sketch, true);
+    //             System.out.println("Sketch #" + sketches_.size() + ": " + sketch);
+    //         }
+    //         unsat = blockModel();
+    //     }
+    // }
 
 
     public Pair<Node,Node> search() {
@@ -1935,13 +1961,14 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
                 //long s1 = LibUtils.tick();
                 // STEP 1. Decide all higher-order components
                 while (level_ < highTrail_.size()) {
-
+                    System.out.println("HighTrail: " + highTrail_);
                     if (unsat) break;
 
                     //long s = LibUtils.tick();
                     Constr conflict = satUtils_.propagate();
                     //long e = LibUtils.tick();
                     //propagateTime_ += LibUtils.computeTime(s,e);
+                    // System.out.println("conflict = " + conflict);
                     if (conflict != null) {
                         int backjumpLevel = satUtils_.analyzeSATConflict(conflict);
                         int neoLevel = convertLevelFromSATtoNeo(backjumpLevel);
@@ -1996,6 +2023,10 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
                     assert (highTrail_.get(i).t0.function != "");
                     sketch += highTrail_.get(i).t0.function + " ";
                 }
+                // if (true) {
+                //     System.out.println("HighTrail: " + highTrail_);
+                //     System.out.println("Sketch: " + sketch);
+                // }
 
                 if (!sketches_.containsKey(sketch)){
 
@@ -2068,6 +2099,7 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
 //                step1Time_ += LibUtils.computeTime(s1,e1);
             }
 
+            System.out.println("STEP Sketch: " + step_ + highTrail_);
             if (step_ == 2) {
 
 //                long s2 = LibUtils.tick();
@@ -2086,6 +2118,8 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
                         Constr conflict = satUtils_.propagate();
 //                        long e = LibUtils.tick();
 //                        propagateTime_ += LibUtils.computeTime(s,e);
+                        System.out.println(currentLine_ + " " +  currentChild_ + " " + trail_.get(currentLine_));
+                        System.out.println("Conflict Sketch: " + conflict + trail_);
                         if (conflict != null) {
                             int backjumpLevel = satUtils_.analyzeSATConflict(conflict);
                             int neoLevel = convertLevelFromSATtoNeo(backjumpLevel);
@@ -2205,7 +2239,7 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
                                 }
                             }
                             treeSketch_ = ast.toString();
-
+                            // System.out.println("HERE1 " + treeSketch_);
                             return ast;
                         }
 
@@ -2217,6 +2251,7 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
             }
 
 
+            System.out.println("STEP Sketch: " + step_ + highTrail_);
             if (step_ == 3) {
 
 //                long s3 = LibUtils.tick();
@@ -2389,6 +2424,7 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
 
                             cpTrailSAT_.clear();
                             trailSAT_.copyTo(cpTrailSAT_);
+                            // System.out.println("HERE2 " + ast);
                             return ast;
                         }
 

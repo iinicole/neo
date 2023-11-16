@@ -26,6 +26,7 @@ public class InputType implements AbstractType {
     public String toString() {
         return "InputType{" +
                 "index=" + index +
+                ", type=" + type +
                 '}';
     }
 }
