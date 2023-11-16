@@ -20,7 +20,7 @@ public class MapLList implements Unop {
     }
 
     public Object apply(Object obj) {
-        System.out.println("MapLList unop " + this.unop + " obj " + obj);
+        // System.out.println("MapLList unop " + this.unop + " obj " + obj);
         if (obj instanceof  Integer){
             assert ((Integer)obj == 256);
             return new ArrayList<>();

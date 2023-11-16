@@ -99,7 +99,7 @@ public class DeepCoderGrammar implements Grammar<AbstractType> {
             if (input.getType() instanceof IntType)
                 productions.add(new Production<>(new IntType(), "input" + input.getIndex()));
             else if (input.getType() instanceof ListType)
-                productions.add(new Production<>(new ListType(new IntType()), "input" + input.getIndex()));
+                productions.add(new Production<>(input.getType(), "input" + input.getIndex()));
             else if (input.getType() instanceof BoolType)
                 productions.add(new Production<>(new BoolType(), "input" + input.getIndex()));
             else

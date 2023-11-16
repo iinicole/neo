@@ -729,8 +729,8 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
     }
 
     private void buildSATFormula() {
-        System.out.println("varNodes: " + varNodes_);
-        System.out.println("nameNodes_: " + nameNodes_);
+        // System.out.println("varNodes: " + varNodes_);
+        // System.out.println("nameNodes_: " + nameNodes_);
         boolean conflict = false;
 
         // If a production is used in a parent node then this implies restrictions on the children
@@ -1147,6 +1147,7 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
         //prods.addAll(grammar_.getLineProductions(maxLen_));
 
         inputProductions_.addAll((List<Production<T>>) grammar_.getInputProductions());
+        // System.out.println("inputProductions_ " + inputProductions_);
 
         for (Production<T> prod : (List<Production<T>>) grammar_.getLineProductions(maxLen_)){
             for (int i = 0 ; i < maxLen_; i++){
@@ -1961,7 +1962,7 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
                 //long s1 = LibUtils.tick();
                 // STEP 1. Decide all higher-order components
                 while (level_ < highTrail_.size()) {
-                    System.out.println("HighTrail: " + highTrail_);
+                    // System.out.println("HighTrail: " + highTrail_);
                     if (unsat) break;
 
                     //long s = LibUtils.tick();
@@ -2099,7 +2100,7 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
 //                step1Time_ += LibUtils.computeTime(s1,e1);
             }
 
-            System.out.println("STEP Sketch: " + step_ + highTrail_);
+            // System.out.println("STEP Sketch: " + step_ + highTrail_);
             if (step_ == 2) {
 
 //                long s2 = LibUtils.tick();
@@ -2118,8 +2119,8 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
                         Constr conflict = satUtils_.propagate();
 //                        long e = LibUtils.tick();
 //                        propagateTime_ += LibUtils.computeTime(s,e);
-                        System.out.println(currentLine_ + " " +  currentChild_ + " " + trail_.get(currentLine_));
-                        System.out.println("Conflict Sketch: " + conflict + trail_);
+                        // System.out.println(currentLine_ + " " +  currentChild_ + " " + trail_.get(currentLine_));
+                        // System.out.println("Conflict Sketch: " + conflict + trail_);
                         if (conflict != null) {
                             int backjumpLevel = satUtils_.analyzeSATConflict(conflict);
                             int neoLevel = convertLevelFromSATtoNeo(backjumpLevel);
@@ -2251,7 +2252,7 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
             }
 
 
-            System.out.println("STEP Sketch: " + step_ + highTrail_);
+            // System.out.println("STEP Sketch: " + step_ + highTrail_);
             if (step_ == 3) {
 
 //                long s3 = LibUtils.tick();
