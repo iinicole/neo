@@ -86,6 +86,7 @@ public class DeepCoderGrammar implements Grammar<AbstractType> {
         for (int i = 0; i < size; i++) {
             productions.add(new Production<>(new IntType(), "line" + i + "int"));
             productions.add(new Production<>(new ListType(new IntType()), "line" + i + "list"));
+            productions.add(new Production<>(new ListType(new ListType(new IntType())), "line" + i + "listlist"));
         }
 
         return productions;
