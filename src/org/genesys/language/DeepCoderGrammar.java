@@ -155,6 +155,7 @@ public class DeepCoderGrammar implements Grammar<AbstractType> {
         productions.add(new Production<>(true,id++,new TemplateType(), "HEAD", new ListType(new TemplateType())));
         productions.add(new Production<>(new UnopType(), "HEAD_INPUT"));
         productions.add(new Production<>(true,id++,new TemplateType(), "LAST", new ListType(new TemplateType())));
+        productions.add(new Production<>(new UnopType(), "LAST_INPUT"));
         productions.add(new Production<>(true,id++,new TemplateType(), "ACCESS", new ListType(new TemplateType()), new IntType()));
 
         // ListType -- only considering lists of IntType

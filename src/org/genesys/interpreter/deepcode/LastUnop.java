@@ -15,7 +15,7 @@ public class LastUnop implements Unop {
     public Object apply(Object obj) {
         if (obj instanceof  Integer){
             // assert ((Integer)obj == 256);
-            return new ArrayList<>();
+            return null;
         }
         assert obj instanceof List : obj;
         List<Object> list = LibUtils.cast(obj);

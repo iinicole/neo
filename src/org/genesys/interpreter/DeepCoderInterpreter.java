@@ -49,8 +49,9 @@ public class DeepCoderInterpreter extends BaseInterpreter {
         executors.put("MINIMUM", (objects, input) -> new Maybe<>(new MinimumUnop().apply(objects.get(0))));
         executors.put("SUM", (objects, input) -> new Maybe<>(new SumUnop().apply(objects.get(0))));
         executors.put("LAST", (objects, input) -> new Maybe<>(new LastUnop().apply(objects.get(0))));
+        executors.put("LAST_INPUT", (objects, input) -> new Maybe<>(new LastUnop()));
         executors.put("HEAD", (objects, input) -> new Maybe<>(new HeadUnop().apply(objects.get(0))));
-        executors.put("HEAD_INPUT", (objects, input) -> new Maybe<>(new HigherOrderUnop(new HeadUnop())));
+        executors.put("HEAD_INPUT", (objects, input) -> new Maybe<>(new HeadUnop()));
         executors.put("DROP", (objects, input) -> new Maybe<>(new DropUnop().apply(objects)));
         executors.put("ACCESS", (objects, input) -> new Maybe<>(new AccessUnop().apply(objects)));
 
