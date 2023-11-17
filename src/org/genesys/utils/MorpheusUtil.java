@@ -210,7 +210,7 @@ public class MorpheusUtil {
             throw new UnsupportedOperationException("Invalid obj." + obj.getClass());
     }
 
-    public int getMax(Object obj) {
+    public Integer getMax(Object obj) {
         if (obj instanceof Integer)
             return (Integer) obj;
         else if (obj instanceof List) {
@@ -218,7 +218,7 @@ public class MorpheusUtil {
             assert !aList.isEmpty();
             int maxIndex = aList.indexOf(Collections.max(aList));
             
-            return (int) aList.get(maxIndex);
+            return (Integer) aList.get(maxIndex);
         } else {
             throw new UnsupportedOperationException("Invalid obj." + obj.getClass());
         }

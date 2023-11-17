@@ -50,6 +50,7 @@ public class DeepCoderInterpreter extends BaseInterpreter {
         executors.put("SUM", (objects, input) -> new Maybe<>(new SumUnop().apply(objects.get(0))));
         executors.put("LAST", (objects, input) -> new Maybe<>(new LastUnop().apply(objects.get(0))));
         executors.put("HEAD", (objects, input) -> new Maybe<>(new HeadUnop().apply(objects.get(0))));
+        executors.put("HEAD_INPUT", (objects, input) -> new Maybe<>(new HigherOrderUnop(new HeadUnop())));
         executors.put("DROP", (objects, input) -> new Maybe<>(new DropUnop().apply(objects)));
         executors.put("ACCESS", (objects, input) -> new Maybe<>(new AccessUnop().apply(objects)));
 
@@ -57,12 +58,12 @@ public class DeepCoderInterpreter extends BaseInterpreter {
         executors.put("REVERSE", (objects, input) -> new Maybe<>(new ReverseUnop().apply(objects.get(0))));
 
         executors.put("MAP", (objects, input) ->
-                new Maybe<>(new MapLList((Unop) objects.get(1)).apply(objects.get(0)))
+                new Maybe<>(new MapLList((Unop) objects.get(0)).apply(objects.get(1)))
         );
 
-        executors.put("MAP-HEAD", (objects, input) ->
-                new Maybe<>(new MapLList((Unop)new HeadUnop()).apply(objects.get(0)))
-        );
+        // executors.put("MAP-HEAD", (objects, input) ->
+        //         new Maybe<>(new MapLList((Unop)new HeadUnop()).apply(objects.get(0)))
+        // );
 
         executors.put("GROUP", (objects, input) -> new Maybe<>(new GroupUnop().apply(objects.get(0))));
 

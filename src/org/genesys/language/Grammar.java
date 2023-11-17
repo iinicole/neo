@@ -24,4 +24,8 @@ public interface Grammar<T> {
 
     List<Production<T>> getLineProductions(int size);
 
+    default List<T> getAllTypes(T type) {
+        return null;
+    }
+
 }

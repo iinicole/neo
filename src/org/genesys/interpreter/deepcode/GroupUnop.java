@@ -14,15 +14,15 @@ public class GroupUnop implements Unop {
 
     public Object apply(Object obj) {
         if (obj instanceof  Integer){
-            assert ((Integer)obj == 256);
+            //  assert ((Integer)obj == 256);
             return new ArrayList<>();
         }
         assert obj instanceof List;
-        List<Integer> list = LibUtils.cast(obj);
+        List<Object> list = LibUtils.cast(obj);
         if (list.isEmpty()) return 256;
         // group same element together and form new list of list
-        List<List<Integer>> result = new ArrayList<>();
-        List<Integer> cur = new ArrayList<>();
+        List<List<Object>> result = new ArrayList<>();
+        List<Object> cur = new ArrayList<>();
         cur.add(list.get(0));
         for (int i = 1; i < list.size(); i++) {
             if (list.get(i).equals(list.get(i - 1))) {

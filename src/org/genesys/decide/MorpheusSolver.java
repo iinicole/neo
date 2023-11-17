@@ -1,4 +1,5 @@
 package org.genesys.decide;
+import org.genesys.type.*;
 
 import com.microsoft.z3.BoolExpr;
 import org.genesys.language.Grammar;
@@ -740,10 +741,28 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
                 int productionVar = varNodes_.get(new Pair<Integer, Production>(node.id, p));
                 boolean exist_production = true;
                 for (int i = 0; i < p.inputs.length; i++){
-                    if(!prodTypes_.containsKey(p.inputs[i].toString())) {
+                    // getAllTypes
+                    List<AbstractType> allTypes = grammar_.getAllTypes(p.inputs[i]);
+                    boolean exist = false;
+                    // System.out.println(allTypes);
+                    for (AbstractType t : allTypes){
+                        if (prodTypes_.containsKey(t.toString())) {
+                            exist = true;
+                            break;
+                        }
+                    }
+                    
+                    if (!exist){
                         exist_production = false;
+                        // System.out.println("!!!Does not have prod rule for input type: " + p.inputs[i].toString() + " on prod " + p.function);
                         break;
                     }
+
+                    // if(!prodTypes_.containsKey(p.inputs[i].toString())) {
+                    //     exist_production = false;
+                    //     System.out.println("!!!Does not have prod rule for input type: " + p.inputs[i].toString() + " on prod " + p.function);
+                    //     break;
+                    // }
                 }
 
                 if (!exist_production) {
@@ -754,15 +773,22 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
                     ArrayList<Production> occurs = new ArrayList<>();
                     VecInt clause = new VecInt();
                     clause.push(-productionVar);
-                    for (Production pc : prodTypes_.get(p.inputs[i].toString())) {
-                        if (node.children.get(i).domain.contains(pc)) {
-                            Pair<Integer, Production> pair = new Pair<Integer, Production>(node.children.get(i).id, pc);
-                            assert (varNodes_.containsKey(pair));
-                            // Parent restricts the domain of the child (positively)
-                            clause.push(varNodes_.get(pair));
-                            occurs.add(pc);
+                    List<AbstractType> allTypes = grammar_.getAllTypes(p.inputs[i]);
+                    for (AbstractType t : allTypes) {
+                        if (!prodTypes_.containsKey(t.toString())) {
+                            continue;
+                        }
+                        for (Production pc : prodTypes_.get(t.toString())) {
+                            if (node.children.get(i).domain.contains(pc)) {
+                                Pair<Integer, Production> pair = new Pair<Integer, Production>(node.children.get(i).id, pc);
+                                assert (varNodes_.containsKey(pair));
+                                // Parent restricts the domain of the child (positively)
+                                clause.push(varNodes_.get(pair));
+                                occurs.add(pc);
+                            }
                         }
                     }
+                    
                     if (clause.size() > 1) {
                         conflict = satUtils_.addClause(clause);
                         assert(!conflict);
@@ -1182,9 +1208,10 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
             if (prod.higher) {
                 domainHigher_.add(prod);
 
-                if (grammar_.getOutputType().toString().equals(prod.source.toString())) {
+                if (grammar_.getOutputType().equals(prod.source)) {
                     domainOutput_.add(prod);
                 }
+                
                 //domainOutput_.add(prod);
 
                 // FIXME: we could potentially prune some input productions
@@ -1195,6 +1222,9 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
             }
 
         }
+        // System.out.println("prods: " + prods);
+        // System.out.println("prodTypes_: " + prodTypes_);
+        // System.out.println("domainOutput_: " + domainOutput_);
     }
 
     private <T> void createVariables(Node node) {
@@ -1408,6 +1438,7 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
 
             if (satUtils_.getSolver().truthValue(var) == Lbool.UNDEFINED ||
                     satUtils_.getSolver().truthValue(var) == Lbool.TRUE) {
+                // System.out.println("highTrail_: " + highTrail_ + "level: " + level_  + " prod: " + p.function);
                 decideMap.put(p.function, new Pair<Production, Integer>(p, var));
                 decideDomain.add(p.function);
             }

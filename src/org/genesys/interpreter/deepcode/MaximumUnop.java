@@ -14,7 +14,7 @@ public class MaximumUnop implements Unop {
 
     public Object apply(Object obj) {
         if (obj instanceof  Integer){
-            assert ((Integer)obj == 256);
+            //  assert ((Integer)obj == 256);
             return new ArrayList<>();
         }
         assert obj instanceof List : obj;

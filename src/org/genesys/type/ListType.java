@@ -15,6 +15,10 @@ public class ListType implements AbstractType {
         if (!(obj instanceof ListType)) {
             return false;
         }
+        // if obj type is templated return true
+        if (((ListType) obj).type instanceof TemplateType) {
+            return true;
+        }
         return this.type.equals(((ListType) obj).type);
     }
 

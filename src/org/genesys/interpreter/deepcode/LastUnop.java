@@ -14,11 +14,11 @@ public class LastUnop implements Unop {
 
     public Object apply(Object obj) {
         if (obj instanceof  Integer){
-            assert ((Integer)obj == 256);
+            // assert ((Integer)obj == 256);
             return new ArrayList<>();
         }
         assert obj instanceof List : obj;
-        List<Integer> list = LibUtils.cast(obj);
+        List<Object> list = LibUtils.cast(obj);
         int len = list.size();
         return (len == 0) ? 256 : list.get(len - 1);
     }

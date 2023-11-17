@@ -115,6 +115,7 @@ public class DeepCoderChecker implements Checker<Problem, List<Pair<Integer, Lis
                             z3_.clearConflict();
                             return false;
                         }
+                        // System.out.println("worker:" + worker + " inputs: " + inputs + " tgt:" + tgt.get());
                         Object obj = tgt.get();
                         if (obj instanceof List) {
                             List objList = (List) obj;

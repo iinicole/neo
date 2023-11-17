@@ -93,6 +93,7 @@ public class MorpheusSynthesizer implements Synthesizer {
                 e.printStackTrace();
             }
             components_.put(comp.getId(), comp);
+            // System.out.println("component: " + comp);
         }
         //init equivalent class map
         Z3Utils.getInstance().initEqMap(components_.values());

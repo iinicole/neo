@@ -1,22 +1,22 @@
 package org.genesys.type;
 
-
 /**
- * Created by yufeng on 5/31/17.
+ * Created by yufeng on 9/15/17.
  */
-public class IntType implements AbstractType {
+public class UnopType implements AbstractType {
+
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof IntType || obj instanceof TemplateType;
+        return obj instanceof UnopType;
     }
 
     @Override
     public int hashCode() {
-        return 1;
+        return 51;
     }
 
     @Override
     public String toString() {
-        return "Integer";
+        return "UnopType";
     }
 }
