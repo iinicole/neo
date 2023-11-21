@@ -15,8 +15,8 @@ public class SortUnop implements Unop {
 
     public Object apply(Object obj) {
         if (obj instanceof  Integer){
-            assert ((Integer)obj == 256);
-            return new ArrayList<>();
+            // assert ((Integer)obj == 256);
+            return null;
         }
         assert obj instanceof List : obj;
         List<Integer> list = LibUtils.cast(obj);

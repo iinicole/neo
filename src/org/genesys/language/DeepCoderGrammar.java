@@ -165,7 +165,7 @@ public class DeepCoderGrammar implements Grammar<AbstractType> {
         productions.add(new Production<>(true,id++,new ListType(new IntType()), "MAP-POW", new ListType(new IntType()), new ConstPosType()));
 
         // temp testing
-        productions.add(new Production<>(true,id++,new ListType(new TemplateType()), "MAP", new UnopType(), new ListType(new ListType(new TemplateType()))));
+        productions.add(new Production<>(true,id++,new ListType(new TemplateType()), "MAP", new UnopType(), new ListType(new TemplateType())));
         // productions.add(new Production<>(true,id++,new ListType(new TemplateType()), "MAP-HEAD", new ListType(new ListType(new TemplateType()))));
         productions.add(new Production<>(true,id++,new ListType(new ListType(new TemplateType())), "GROUP", new ListType(new TemplateType())));
 
