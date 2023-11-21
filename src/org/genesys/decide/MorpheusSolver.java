@@ -727,6 +727,15 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
         currentLine_ = 0;
         currentSATLevel_.add(0);
 
+        // // iterate thru the trail
+        // for (int i = 0; i < highTrail_.size(); i++){
+        //     // print out node id and domain
+        //     System.out.println("Node: " + highTrail_.get(i).t0.id + " " + highTrail_.get(i).t0.domain);
+        //     // print out children id and domain
+        //     for (int j = 0; j < highTrail_.get(i).t0.children.size(); j++){
+        //         System.out.println("Child: " + highTrail_.get(i).t0.children.get(j).id + " " + highTrail_.get(i).t0.children.get(j).domain);
+        //     }
+        // }
     }
 
     private void buildSATFormula() {
@@ -757,12 +766,6 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
                         // System.out.println("!!!Does not have prod rule for input type: " + p.inputs[i].toString() + " on prod " + p.function);
                         break;
                     }
-
-                    // if(!prodTypes_.containsKey(p.inputs[i].toString())) {
-                    //     exist_production = false;
-                    //     System.out.println("!!!Does not have prod rule for input type: " + p.inputs[i].toString() + " on prod " + p.function);
-                    //     break;
-                    // }
                 }
 
                 if (!exist_production) {
@@ -770,6 +773,11 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
                 }
 
                 for (int i = 0; i < p.inputs.length; i++) {
+
+                    // if (p.inputs.length > node.children.size()) {
+                    //     continue;
+                    // }
+
                     ArrayList<Production> occurs = new ArrayList<>();
                     VecInt clause = new VecInt();
                     clause.push(-productionVar);
@@ -1359,10 +1367,12 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
         Map<String, Pair<Production, Integer>> decideMap = new HashMap<>();
         List<String> decideDomain = new ArrayList<>();
         for (Production p : node.domain) {
+            // System.out.println("parent node: " + highTrail_.get(currentLine_).t0 + " currentChild: " + currentChild_ + " p: " + p);
             int var = varNodes_.get(new Pair<Integer, Production>(node.id, p));
-
+            // System.out.println("highTrail: " + highTrail_ + ", p: " + p + ", node: " + node.id);
             if (satUtils_.getSolver().truthValue(var) == Lbool.UNDEFINED ||
                     satUtils_.getSolver().truthValue(var) == Lbool.TRUE) {
+                // System.out.println("parent node: " + highTrail_.get(currentLine_).t0.decision + " child: " + p);
                 Pair<Production, Integer> pp = new Pair<Production, Integer>(p, var);
                 if (assignmentsCache_.containsKey(trailSAT_.toString())) {
                     if (!assignmentsCache_.get(trailSAT_.toString()).contains(-pp.t1)) {
@@ -1374,6 +1384,9 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
                     decideDomain.add(p.function);
                 }
             }
+            // else {
+            //     System.out.println("parent node: " + highTrail_.get(currentLine_).t0.decision + " child: " + p + " is false");
+            // }
         }
 
         if (!decideDomain.isEmpty()) {
@@ -2178,6 +2191,7 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
                         } else {
                             // Assumes that all higher-order components have children
                                 Node decision = decideInputs();
+                                // System.out.println("decideInputs highTrail: " + highTrail_ + "decision: " + decision);
                                 if (decision != null)
                                     children_assigned = true;
                             currentChild_++;
@@ -2328,6 +2342,7 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
                         } else {
                             if (highTrail_.get(currentLine_).t0.children.get(currentChild_).function.equals("")) {
                                 Node decision = decideFirst();
+                                // System.out.println("decideFirst highTrail: " + highTrail_ + " decision: " + decision);
                                 if (decision == null) {
                                     // go back to step 2?
                                     step_ = 2;

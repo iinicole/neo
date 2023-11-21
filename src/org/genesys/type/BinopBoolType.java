@@ -3,7 +3,7 @@ package org.genesys.type;
 /**
  * Created by yufeng on 9/15/17.
  */
-public class BinopBoolType implements AbstractType {
+public class BinopBoolType implements FuncType {
 
     @Override
     public boolean equals(Object obj) {

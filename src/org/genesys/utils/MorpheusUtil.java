@@ -215,7 +215,7 @@ public class MorpheusUtil {
             return (Integer) obj;
         else if (obj instanceof List) {
             List aList = getFlatList(obj);
-            assert !aList.isEmpty();
+            assert !aList.isEmpty() : obj;
             int maxIndex = aList.indexOf(Collections.max(aList));
             
             return (Integer) aList.get(maxIndex);

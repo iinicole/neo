@@ -149,6 +149,7 @@ public class DeepCoderGrammar implements Grammar<AbstractType> {
         productions.add(new Production<>(new ConstPosType(),"3"));
 
         productions.add(new Production<>(true, id++, new IntType(), "MAXIMUM", new ListType(new IntType())));
+        productions.add(new Production<>(new UnopType(), "MAXIMUM_INPUT"));
         productions.add(new Production<>(true,id++,new IntType(), "COUNT", new ListType(new IntType()), new BinopBoolType(),new ConstNotZeroType()));
         productions.add(new Production<>(true, id++, new IntType(), "MINIMUM", new ListType(new IntType())));
         productions.add(new Production<>(true, id++,new IntType(), "SUM", new ListType(new IntType())));
@@ -158,15 +159,14 @@ public class DeepCoderGrammar implements Grammar<AbstractType> {
         productions.add(new Production<>(new UnopType(), "LAST_INPUT"));
         productions.add(new Production<>(true,id++,new TemplateType(), "ACCESS", new ListType(new TemplateType()), new IntType()));
 
-        // ListType -- only considering lists of IntType
+        // ListType
         productions.add(new Production<>(true,id++,new ListType(new IntType()), "MAP-MUL", new ListType(new IntType()), new ConstType()));
         productions.add(new Production<>(true,id++,new ListType(new IntType()), "MAP-DIV", new ListType(new IntType()), new ConstNotZeroType()));
         productions.add(new Production<>(true,id++,new ListType(new IntType()), "MAP-PLUS", new ListType(new IntType()), new ConstType()));
         productions.add(new Production<>(true,id++,new ListType(new IntType()), "MAP-POW", new ListType(new IntType()), new ConstPosType()));
 
-        // temp testing
-        productions.add(new Production<>(true,id++,new ListType(new TemplateType()), "MAP", new UnopType(), new ListType(new TemplateType())));
-        // productions.add(new Production<>(true,id++,new ListType(new TemplateType()), "MAP-HEAD", new ListType(new ListType(new TemplateType()))));
+        // added new productions
+        productions.add(new Production<>(true,id++,new ListType(new TemplateType()), "MAP", new UnopType(), new ListType(new ListType(new TemplateType()))));
         productions.add(new Production<>(true,id++,new ListType(new ListType(new TemplateType())), "GROUP", new ListType(new TemplateType())));
 
         productions.add(new Production<>(true,id++,new ListType(new IntType()), "FILTER", new ListType(new IntType()), new BinopBoolType(),new ConstType()));

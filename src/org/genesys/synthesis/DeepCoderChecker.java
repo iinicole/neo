@@ -110,6 +110,7 @@ public class DeepCoderChecker implements Checker<Problem, List<Pair<Integer, Lis
                 if (!worker.children.isEmpty() && comp != null) {
 
                     if ((curr != null) && (worker.id == curr.id)) {
+                        // System.out.println("worker:" + worker + " inputs: " + inputs);
                         Maybe<Object> tgt = interpreter_.execute(worker, inputs);
                         if (!tgt.has()) {
                             z3_.clearConflict();

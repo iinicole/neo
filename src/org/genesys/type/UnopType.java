@@ -3,7 +3,7 @@ package org.genesys.type;
 /**
  * Created by yufeng on 9/15/17.
  */
-public class UnopType implements AbstractType {
+public class UnopType implements FuncType {
 
     @Override
     public boolean equals(Object obj) {
