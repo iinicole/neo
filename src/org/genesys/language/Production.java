@@ -6,6 +6,8 @@ package org.genesys.language;
  */
 public class Production<T> {
 
+    public boolean canBeInput;
+
     public boolean higher;
 
     public final String function;
@@ -44,7 +46,8 @@ public class Production<T> {
         this.higher = false;
     }
 
-    public Production(boolean higher, int id, T src, String function, T... inputs) {
+    public Production(boolean canBeInput, boolean higher, int id, T src, String function, T... inputs) {
+        this.canBeInput = canBeInput;
         this.id = id;
         this.higher = higher;
         this.source = src;

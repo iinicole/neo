@@ -18,10 +18,10 @@ public class ReverseUnop implements Unop {
             return null;
         }
         assert obj instanceof List : obj;
-        List<Integer> list = LibUtils.cast(obj);
+        List list = LibUtils.cast(obj);
         // Make a deep copy
-        List<Integer> reverse = new ArrayList<>();
-        for (Integer i : list)
+        List reverse = new ArrayList<>();
+        for (Object i : list)
             reverse.add(i);
         Collections.reverse(reverse);
         return reverse;

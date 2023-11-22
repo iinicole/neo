@@ -19,10 +19,11 @@ public class SortUnop implements Unop {
             return null;
         }
         assert obj instanceof List : obj;
-        List<Integer> list = LibUtils.cast(obj);
+        if (((List)obj).isEmpty()) return null;
+        List list = LibUtils.cast(obj);
         // Make a deep copy
-        List<Integer> sorted = new ArrayList<>();
-        for (Integer i : list)
+        List sorted = new ArrayList<>();
+        for (Object i : list)
             sorted.add(i);
         Collections.sort(sorted);
         return sorted;

@@ -2129,6 +2129,7 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
                     System.out.println("Sketch #iterations = " + iterations_);
                     iterations_ = 0;
                     System.out.println("Sketch #" + sketches_.size() + ": " + sketch);
+                    // System.out.println("HighTrail: " + highTrail_);
                     //Z3Utils.getInstance().cleanCache();
                     System.out.println("#constraints = " + SATUtils.getInstance().getSolver().nConstraints());
                 } else {
@@ -2298,12 +2299,14 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
 
 
             // System.out.println("STEP Sketch: " + step_ + highTrail_);
+            // System.out.println("currentLine = " + currentLine_ + " currentChild=" + currentChild_ + " trail=" + trail_ + " highTrail=" + highTrail_);
             if (step_ == 3) {
 
 //                long s3 = LibUtils.tick();
 
                 // Fill line-by-line and only ask the deduction system after we have a full line
                     //assert (currentLine_ < trail_.size());
+                    // System.out.println("currentLine = " + currentLine_ + " currentChild=" + currentChild_ + " trail=" + trail_ + " highTrail=" + highTrail_);
                     while (currentChild_ < trail_.get(currentLine_).size()) {
 //                        long s = LibUtils.tick();
                         Constr conflict = satUtils_.propagate();

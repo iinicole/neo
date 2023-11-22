@@ -18,6 +18,9 @@ public class Scanl implements Unop {
 
     public Object apply(Object obj) {
         assert obj != null;
+        if (obj instanceof Integer) {
+            return null;
+        }
         List arg = (List) obj;
         List targetList = new ArrayList();
         for (int i = 0; i < arg.size(); i++) {

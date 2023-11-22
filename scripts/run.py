@@ -16,11 +16,12 @@ def run_test(file_path):
     base_cmd = f'ant neoDeep -Ddepth=3 -Dlearn=true -Dstat=false -Dfile=""  -Dapp={file_path}'
     # subprocess run
     # os.system(base_cmd)
-    res = subprocess.run(base_cmd, shell=True, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    if res.returncode != 0:
-        print(f'Error running {file_path}')
-    else:
+    try:
+        res = subprocess.run(base_cmd, shell=True, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         print(f'Success running {file_path}')
+    except subprocess.CalledProcessError as e:
+        print(f'Error running {file_path}')
+        return
 
 if __name__ == '__main__':
     # folder path is first argument

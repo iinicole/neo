@@ -38,9 +38,9 @@ public class DeepCoderMainMorpheus {
 
         DeepCoderGrammar grammar = new DeepCoderGrammar(dcProblem);
         /* Load component specs. */
-        Checker checker = new DeepCoderChecker(specLoc);
+        Checker checker = new DeepCoderChecker(specLoc, grammar);
         //Checker checker = new DummyChecker();
-        Interpreter interpreter = new DeepCoderInterpreter();
+        Interpreter interpreter = new DeepCoderInterpreter(grammar);
         Decider decider = new FirstDecider();
 
         MorpheusSynthesizer synth;

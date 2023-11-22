@@ -1,6 +1,7 @@
 package org.genesys.interpreter;
 
 import org.genesys.interpreter.deepcode.*;
+import org.genesys.language.Grammar;
 import org.genesys.language.Production;
 import org.genesys.models.Node;
 import org.genesys.models.Pair;
@@ -8,13 +9,17 @@ import org.genesys.type.*;
 
 import java.util.*;
 
+import javax.swing.GroupLayout.Group;
+
 /**
  * interpreter for L2 tool. Can be used in Deepcoder
  * Created by yufeng on 5/31/17.
  */
 public class DeepCoderInterpreter extends BaseInterpreter {
 
-    public DeepCoderInterpreter() {
+    private Grammar grammar;
+
+    public DeepCoderInterpreter(Grammar grammar) {
         executors.put("root", (objects, input) -> {
             Object obj = objects.get(0);
             if (obj instanceof Unop)
@@ -45,19 +50,57 @@ public class DeepCoderInterpreter extends BaseInterpreter {
         executors.put("SQR", (objects, input) -> new Maybe<>(new NumUnop(new PrimitiveBinop("**"), 2)));
         executors.put("doNEG", (objects, input) -> new Maybe<>(new NumUnop(new PrimitiveBinop("*"), -1)));
 
-        executors.put("MAXIMUM", (objects, input) -> new Maybe<>(new MaximumUnop().apply(objects.get(0))));
-        executors.put("MAXIMUM_INPUT", (objects, input) -> new Maybe<>(new MaximumUnop()));
-        executors.put("MINIMUM", (objects, input) -> new Maybe<>(new MinimumUnop().apply(objects.get(0))));
-        executors.put("SUM", (objects, input) -> new Maybe<>(new SumUnop().apply(objects.get(0))));
-        executors.put("LAST", (objects, input) -> new Maybe<>(new LastUnop().apply(objects.get(0))));
+        executors.put("MAXIMUM", (objects, input) -> {
+            if (objects.size() == 0) {
+                return new Maybe<>(new MaximumUnop());
+            }
+            return new Maybe<>(new MaximumUnop().apply(objects.get(0)));
+        });
+        executors.put("MAXIMUM_INPUT", (objects, input) -> {
+            // System.out.println("MAXIMUM_INPUT objects: " + objects + "input: " + input); 
+            return new Maybe<>(new MaximumUnop());
+        });
+        executors.put("MINIMUM", (objects, input) -> {
+            if (objects.size() == 0) {
+                return new Maybe<>(new MinimumUnop());
+            }
+            return new Maybe<>(new MinimumUnop().apply(objects.get(0)));
+        });
+        executors.put("SUM", (objects, input) -> {
+            if (objects.size() == 0) {
+                return new Maybe<>(new SumUnop());
+            }
+            return new Maybe<>(new SumUnop().apply(objects.get(0)));
+        });
+        executors.put("LAST", (objects, input) -> {
+            if (objects.size() == 0) {
+                return new Maybe<>(new LastUnop());
+            }
+            return new Maybe<>(new LastUnop().apply(objects.get(0)));
+        });
         executors.put("LAST_INPUT", (objects, input) -> new Maybe<>(new LastUnop()));
-        executors.put("HEAD", (objects, input) -> new Maybe<>(new HeadUnop().apply(objects.get(0))));
+        executors.put("HEAD", (objects, input) -> {
+            if (objects.size() == 0) {
+                return new Maybe<>(new HeadUnop());
+            }
+            return new Maybe<>(new HeadUnop().apply(objects.get(0)));
+        });
         executors.put("HEAD_INPUT", (objects, input) -> new Maybe<>(new HeadUnop()));
         executors.put("DROP", (objects, input) -> new Maybe<>(new DropUnop().apply(objects)));
         executors.put("ACCESS", (objects, input) -> new Maybe<>(new AccessUnop().apply(objects)));
 
-        executors.put("SORT", (objects, input) -> new Maybe<>(new SortUnop().apply(objects.get(0))));
-        executors.put("REVERSE", (objects, input) -> new Maybe<>(new ReverseUnop().apply(objects.get(0))));
+        executors.put("SORT", (objects, input) -> {
+            if (objects.size() == 0) {
+                return new Maybe<>(new SortUnop());
+            }
+            return new Maybe<>(new SortUnop().apply(objects.get(0)));
+        });
+        executors.put("REVERSE", (objects, input) -> {
+            if (objects.size() == 0) {
+                return new Maybe<>(new ReverseUnop());
+            }
+            return new Maybe<>(new ReverseUnop().apply(objects.get(0)));
+        });
 
         executors.put("MAP", (objects, input) ->
                 new Maybe<>(new MapLList((Unop) objects.get(0)).apply(objects.get(1)))
@@ -67,7 +110,12 @@ public class DeepCoderInterpreter extends BaseInterpreter {
         //         new Maybe<>(new MapLList((Unop)new HeadUnop()).apply(objects.get(0)))
         // );
 
-        executors.put("GROUP", (objects, input) -> new Maybe<>(new GroupUnop().apply(objects.get(0))));
+        executors.put("GROUP", (objects, input) -> {
+            if (objects.size() == 0) {
+                return new Maybe<>(new GroupUnop());
+            }
+            return new Maybe<>(new GroupUnop().apply(objects.get(0)));
+        });
 
         executors.put("MAP-MUL", (objects, input) ->
                 new Maybe<>(new MapLList((Unop)new PrimitiveUnop("*", objects.get(1))).apply(objects.get(0)))
@@ -158,26 +206,41 @@ public class DeepCoderInterpreter extends BaseInterpreter {
 
         executors.put("SCANL1-PLUS", (objects, input) -> {
             Binop bop = new PrimitiveBinop("+");
+            if (objects.size() == 0) {
+                return new Maybe<>(new Scanl(bop));
+            }
             return new Maybe<>(new Scanl(bop).apply(objects.get(0)));
         });
 
         executors.put("SCANL1-MINUS", (objects, input) -> {
             Binop bop = new PrimitiveBinop("-");
+            if (objects.size() == 0) {
+                return new Maybe<>(new Scanl(bop));
+            }
             return new Maybe<>(new Scanl(bop).apply(objects.get(0)));
         });
 
         executors.put("SCANL1-MUL", (objects, input) -> {
             Binop bop = new PrimitiveBinop("*");
+            if (objects.size() == 0) {
+                return new Maybe<>(new Scanl(bop));
+            }
             return new Maybe<>(new Scanl(bop).apply(objects.get(0)));
         });
 
         executors.put("SCANL1-MIN", (objects, input) -> {
             Binop bop = new MinBinop();
+            if (objects.size() == 0) {
+                return new Maybe<>(new Scanl(bop));
+            }
             return new Maybe<>(new Scanl(bop).apply(objects.get(0)));
         });
 
         executors.put("SCANL1-MAX", (objects, input) -> {
             Binop bop = new MaxBinop();
+            if (objects.size() == 0) {
+                return new Maybe<>(new Scanl(bop));
+            }
             return new Maybe<>(new Scanl(bop).apply(objects.get(0)));
         });
 
@@ -209,6 +272,15 @@ public class DeepCoderInterpreter extends BaseInterpreter {
         executors.put("isNEG", (objects, input) -> new Maybe<>(new PrimitiveUnop("<", 0)));
         executors.put("isODD", (objects, input) -> new Maybe<>(new PrimitiveUnop("%!=2", 0)));
         executors.put("isEVEN", (objects, input) -> new Maybe<>(new PrimitiveUnop("%=2", 0)));
+
+        for (Production p : (List<Production>) grammar.getProductions()) {
+            // if name is not yet in executors
+            if (!executors.containsKey(p.function)) {
+                executors.put(p.function, (objects, input) -> {
+                    return executors.get(p.function.split("_")[0]).execute(objects, input);
+                });
+            }
+        }
     }
 
     @Override

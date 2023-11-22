@@ -7,6 +7,7 @@ import krangl.GroupedDataFrame;
 import org.apache.commons.lang3.StringUtils;
 import org.genesys.interpreter.DeepCoderInterpreter;
 import org.genesys.interpreter.Interpreter;
+import org.genesys.language.Grammar;
 import org.genesys.models.*;
 import org.genesys.type.Maybe;
 import org.genesys.utils.LibUtils;
@@ -31,7 +32,7 @@ public class DeepCoderChecker implements Checker<Problem, List<Pair<Integer, Lis
 
     private MorpheusUtil util_ = MorpheusUtil.getInstance();
 
-    private Interpreter interpreter_ = new DeepCoderInterpreter();
+    private Interpreter interpreter_;
 
     private Map<Pair<Integer, String>, List<BoolExpr>> cstCache_ = new HashMap<>();
 
@@ -48,7 +49,7 @@ public class DeepCoderChecker implements Checker<Problem, List<Pair<Integer, Lis
     //Map a clause to its original spec
     private Map<String, String> clauseToSpecMap_ = new HashMap<>();
 
-    public DeepCoderChecker(String specLoc) throws FileNotFoundException {
+    public DeepCoderChecker(String specLoc, Grammar grammar) throws FileNotFoundException {
         File[] files = new File(specLoc).listFiles();
         for (File file : files) {
             assert file.isFile() : file;
@@ -56,6 +57,8 @@ public class DeepCoderChecker implements Checker<Problem, List<Pair<Integer, Lis
             Component comp = gson.fromJson(new FileReader(json), Component.class);
             components_.put(comp.getName(), comp);
         }
+
+        interpreter_ = new DeepCoderInterpreter(grammar);
     }
 
     /**

@@ -11,6 +11,9 @@ public class PrimitiveBinop implements Binop {
     }
 
     public Object apply(Object first, Object second) {
+        if (!(first instanceof Integer) || !(second instanceof Integer)) {
+            return null;
+        }
         if (this.op.equals("+")) {
             return (int) first + (int) second;
         } else if (this.op.equals("^")) {
