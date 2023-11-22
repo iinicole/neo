@@ -36,6 +36,6 @@ public class Scanl implements Unop {
     }
 
     public String toString() {
-        return "SCANL1";
+        return "SCANL";
     }
 }

@@ -830,10 +830,10 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
 
         /* Domain specific constraints for DeepCoder */
 
-        String[] amo = {"ACCESS", "MAXIMUM", "COUNT", "MINIMUM", "SUM", "HEAD", "LAST", "FILTER", "SORT", "REVERSE", "TAKE", "DROP"};
+        String[] amo = {"ACCESS", "MAXIMUM", "COUNT", "MINIMUM", "SUM", "HEAD", "LAST", "FILTER", "SORT", "REVERSE", "TAKE", "DROP", "GROUP"};
         String[] map = {"MAP-MUL","MAP-DIV","MAP-PLUS","MAP-POW", "MAP-UNARY", "MAP-BINARY"};
         String[] zipwith = {"ZIPWITH-PLUS","ZIPWITH-MINUS","ZIPWITH-MUL","ZIPWITH-MIN","ZIPWITH-MAX", "ZIPWITH"};
-        String[] scanl1 = {"SCANL1-PLUS","SCANL1-MINUS","SCANL1-MUL","SCANL1-MIN","SCANL1-MAX"};
+        String[] scanl = {"SCANL1-PLUS","SCANL1-MINUS","SCANL1-MUL","SCANL1-MIN","SCANL1-MAX", "SCANL"};
 
         for (String s : amo){
             if (prodName_.containsKey(s)) {

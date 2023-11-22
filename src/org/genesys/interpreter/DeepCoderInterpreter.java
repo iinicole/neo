@@ -214,12 +214,12 @@ public class DeepCoderInterpreter extends BaseInterpreter {
         });
 
 
-        executors.put("SCANL1", (objects, input) -> {
+        executors.put("SCANL", (objects, input) -> {
             assert objects.size() == 2 : objects;
             return new Maybe<>(new Scanl((Binop) objects.get(1)).apply(objects.get(0)));
         });
 
-        executors.put("SCANL1-PLUS", (objects, input) -> {
+        executors.put("SCANL-PLUS", (objects, input) -> {
             Binop bop = new PrimitiveBinop("+");
             if (objects.size() == 0) {
                 return new Maybe<>(new Scanl(bop));
@@ -227,7 +227,7 @@ public class DeepCoderInterpreter extends BaseInterpreter {
             return new Maybe<>(new Scanl(bop).apply(objects.get(0)));
         });
 
-        executors.put("SCANL1-MINUS", (objects, input) -> {
+        executors.put("SCANL-MINUS", (objects, input) -> {
             Binop bop = new PrimitiveBinop("-");
             if (objects.size() == 0) {
                 return new Maybe<>(new Scanl(bop));
@@ -235,7 +235,7 @@ public class DeepCoderInterpreter extends BaseInterpreter {
             return new Maybe<>(new Scanl(bop).apply(objects.get(0)));
         });
 
-        executors.put("SCANL1-MUL", (objects, input) -> {
+        executors.put("SCANL-MUL", (objects, input) -> {
             Binop bop = new PrimitiveBinop("*");
             if (objects.size() == 0) {
                 return new Maybe<>(new Scanl(bop));
@@ -243,7 +243,7 @@ public class DeepCoderInterpreter extends BaseInterpreter {
             return new Maybe<>(new Scanl(bop).apply(objects.get(0)));
         });
 
-        executors.put("SCANL1-MIN", (objects, input) -> {
+        executors.put("SCANL-MIN", (objects, input) -> {
             Binop bop = new MinBinop();
             if (objects.size() == 0) {
                 return new Maybe<>(new Scanl(bop));
@@ -251,7 +251,7 @@ public class DeepCoderInterpreter extends BaseInterpreter {
             return new Maybe<>(new Scanl(bop).apply(objects.get(0)));
         });
 
-        executors.put("SCANL1-MAX", (objects, input) -> {
+        executors.put("SCANL-MAX", (objects, input) -> {
             Binop bop = new MaxBinop();
             if (objects.size() == 0) {
                 return new Maybe<>(new Scanl(bop));
@@ -296,6 +296,7 @@ public class DeepCoderInterpreter extends BaseInterpreter {
                 executors.put(p.function, (objects, input) -> {
                     String name = p.function.split("_")[0];
                     assert executors.containsKey(name) : name;
+                    // System.out.println(name);
                     return executors.get(name).execute(objects, input);
                 });
             }

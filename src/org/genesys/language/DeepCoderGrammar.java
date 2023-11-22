@@ -167,7 +167,7 @@ public class DeepCoderGrammar implements Grammar<AbstractType> {
         productions.add(new Production<>(false, true,id++,new ListType(new IntType()), "MAP-BINARY", new BinopIntType(), new ConstType(), new ListType(new IntType())));
         productions.add(new Production<>(true, true,id++,new ListType(new ListType(new TemplateType())), "GROUP", new ListType(new TemplateType())));
 
-        productions.add(new Production<>(false, true,id++,new ListType(new IntType()), "FILTER", new ListType(new IntType()), new BinopBoolType(),new ConstType()));
+        productions.add(new Production<>(false, true,id++,new ListType(new IntType()), "FILTER", new ListType(new IntType()), new BinopBoolType(), new ConstType()));
 
         productions.add(new Production<>(false, true,id++,new ListType(new IntType()), "ZIPWITH", new ListType(new IntType()), new ListType(new IntType()), new BinopIntType()));
         // productions.add(new Production<>(false, true,id++,new ListType(new IntType()), "ZIPWITH-PLUS", new ListType(new IntType()), new ListType(new IntType())));
@@ -179,11 +179,12 @@ public class DeepCoderGrammar implements Grammar<AbstractType> {
         productions.add(new Production<>(true, true,id++,new ListType(new IntType()), "SORT", new ListType(new IntType())));
         productions.add(new Production<>(true, true,id++,new ListType(new IntType()), "REVERSE", new ListType(new IntType())));
 
-        productions.add(new Production<>(true, true,id++,new ListType(new IntType()), "SCANL1-PLUS", new ListType(new IntType())));
-        productions.add(new Production<>(true, true,id++,new ListType(new IntType()), "SCANL1-MINUS", new ListType(new IntType())));
-        productions.add(new Production<>(true, true,id++,new ListType(new IntType()), "SCANL1-MUL", new ListType(new IntType())));
-        productions.add(new Production<>(true, true,id++,new ListType(new IntType()), "SCANL1-MIN", new ListType(new IntType())));
-        productions.add(new Production<>(true, true,id++,new ListType(new IntType()), "SCANL1-MAX", new ListType(new IntType())));
+        productions.add(new Production<>(true, true,id++,new ListType(new IntType()), "SCANL", new ListType(new IntType()), new BinopIntType()));
+        // productions.add(new Production<>(true, true,id++,new ListType(new IntType()), "SCANL-PLUS", new ListType(new IntType())));
+        // productions.add(new Production<>(true, true,id++,new ListType(new IntType()), "SCANL-MINUS", new ListType(new IntType())));
+        // productions.add(new Production<>(true, true,id++,new ListType(new IntType()), "SCANL-MUL", new ListType(new IntType())));
+        // productions.add(new Production<>(true, true,id++,new ListType(new IntType()), "SCANL-MIN", new ListType(new IntType())));
+        // productions.add(new Production<>(true, true,id++,new ListType(new IntType()), "SCANL-MAX", new ListType(new IntType())));
 
         productions.add(new Production<>(false, true,id++,new ListType(new IntType()), "TAKE", new ListType(new IntType()), new IntType()));
         productions.add(new Production<>(false, true,id++,new ListType(new IntType()), "DROP", new ListType(new IntType()), new IntType()));
@@ -245,7 +246,7 @@ public class DeepCoderGrammar implements Grammar<AbstractType> {
                     new ListType(new IntType()), new ListType(new IntType()), new FunctionType(new PairType(new IntType(), new IntType()), new IntType())));
             productions.add(new Production<>(new ListType(new IntType()), "SORT", new ListType(new IntType())));
             productions.add(new Production<>(new ListType(new IntType()), "REVERSE", new ListType(new IntType())));
-            productions.add(new Production<>(new ListType(new IntType()), "SCANL1", new FunctionType(new PairType(new IntType(),
+            productions.add(new Production<>(new ListType(new IntType()), "SCANL", new FunctionType(new PairType(new IntType(),
                     new IntType()), new IntType()), new ListType(new IntType())));
 
 
