@@ -7,6 +7,7 @@ package org.genesys.type;
 public class IntType implements AbstractType {
     @Override
     public boolean equals(Object obj) {
+        // System.out.println("IntType equals: " + obj.toString());
         return obj instanceof IntType || obj instanceof TemplateType;
     }
 

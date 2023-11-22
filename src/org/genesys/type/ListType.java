@@ -12,13 +12,17 @@ public class ListType implements AbstractType {
 
     @Override
     public boolean equals(Object obj) {
+        // System.out.println("ListType equals: " + obj.toString());
         if (!(obj instanceof ListType)) {
             return false;
         }
         // if obj type is templated return true
-        if (((ListType) obj).type instanceof TemplateType) {
-            return true;
-        }
+        // if (((ListType) obj).type instanceof TemplateType) {
+        //     return true;
+        // }
+        // if (this.type instanceof TemplateType) {
+        //     return true;
+        // }
         return this.type.equals(((ListType) obj).type);
     }
 

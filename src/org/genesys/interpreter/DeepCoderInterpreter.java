@@ -78,14 +78,12 @@ public class DeepCoderInterpreter extends BaseInterpreter {
             }
             return new Maybe<>(new LastUnop().apply(objects.get(0)));
         });
-        executors.put("LAST_INPUT", (objects, input) -> new Maybe<>(new LastUnop()));
         executors.put("HEAD", (objects, input) -> {
             if (objects.size() == 0) {
                 return new Maybe<>(new HeadUnop());
             }
             return new Maybe<>(new HeadUnop().apply(objects.get(0)));
         });
-        executors.put("HEAD_INPUT", (objects, input) -> new Maybe<>(new HeadUnop()));
         executors.put("DROP", (objects, input) -> new Maybe<>(new DropUnop().apply(objects)));
         executors.put("ACCESS", (objects, input) -> new Maybe<>(new AccessUnop().apply(objects)));
 
@@ -102,8 +100,12 @@ public class DeepCoderInterpreter extends BaseInterpreter {
             return new Maybe<>(new ReverseUnop().apply(objects.get(0)));
         });
 
-        executors.put("MAP", (objects, input) ->
+        executors.put("MAP-UNARY", (objects, input) ->
                 new Maybe<>(new MapLList((Unop) objects.get(0)).apply(objects.get(1)))
+        );
+
+        executors.put("MAP-BINARY", (objects, input) ->
+                new Maybe<>(new MapLList(new HigherUnop((Binop) objects.get(0), (Integer) objects.get(1))).apply(objects.get(2)))
         );
 
         // executors.put("MAP-HEAD", (objects, input) ->
@@ -111,6 +113,7 @@ public class DeepCoderInterpreter extends BaseInterpreter {
         // );
 
         executors.put("GROUP", (objects, input) -> {
+            // System.out.println("GROUP objects: " + objects + "input: " + input);
             if (objects.size() == 0) {
                 return new Maybe<>(new GroupUnop());
             }
@@ -257,6 +260,8 @@ public class DeepCoderInterpreter extends BaseInterpreter {
         executors.put("+", (objects, input) -> new Maybe<>(new PrimitiveBinop("+")));
         executors.put("*", (objects, input) -> new Maybe<>(new PrimitiveBinop("*")));
         executors.put("-", (objects, input) -> new Maybe<>(new PrimitiveBinop("-")));
+        executors.put("^", (objects, input) -> new Maybe<>(new PrimitiveBinop("^")));
+        executors.put("/", (objects, input) -> new Maybe<>(new PrimitiveBinop("/")));
 
         executors.put("MIN", (objects, input) -> new Maybe<>(new MinBinop()));
         executors.put("MAX", (objects, input) -> new Maybe<>(new MaxBinop()));
@@ -277,7 +282,9 @@ public class DeepCoderInterpreter extends BaseInterpreter {
             // if name is not yet in executors
             if (!executors.containsKey(p.function)) {
                 executors.put(p.function, (objects, input) -> {
-                    return executors.get(p.function.split("_")[0]).execute(objects, input);
+                    String name = p.function.split("_")[0];
+                    assert executors.containsKey(name) : name;
+                    return executors.get(name).execute(objects, input);
                 });
             }
         }

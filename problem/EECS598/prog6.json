@@ -1,5 +1,6 @@
 {
-  "name": "prog0",
+  "name": "prog6",
+  "program": "(MAP HEAD (GROUP (SORT input0)))",
   "examples": [
     {
       "input": [

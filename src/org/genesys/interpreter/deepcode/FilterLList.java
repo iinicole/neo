@@ -34,6 +34,9 @@ public class FilterLList implements Unop {
         } else {
             List targetList = new ArrayList<>();
             for (Object elem : list) {
+                if (!(elem instanceof Integer)) {
+                    return null;
+                }
                 if (op.toString().equals("l(a,b).(< a b)") && (Integer)elem < rhs) {
                     targetList.add(elem);
                 } else if (op.toString().equals("l(a,b).(> a b)") && (Integer)elem > rhs) {

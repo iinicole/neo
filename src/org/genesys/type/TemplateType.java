@@ -11,17 +11,24 @@ public class TemplateType implements AbstractType {
 
     @Override
     public boolean equals(Object obj) {
+        // System.out.println("TemplateType equals: " + obj.toString());
         // compare that type is not yet set or that the types are equal
-        if (obj instanceof TemplateType) {
-            return this.type == null || this.type.equals(((TemplateType) obj).type);
+        if (obj instanceof TemplateType || obj instanceof IntType || obj instanceof ListType) {
+            return true;
         }
-        else if (obj instanceof IntType) {
-            return this.type == null || this.type.equals(((IntType) obj));
+        else {
+            return false;
         }
-        else if (obj instanceof ListType) {
-            return this.type == null || this.type.equals(((ListType) obj));
-        }
-        return false;
+        // if (obj instanceof TemplateType) {
+        //     return this.type == null || this.type.equals(((TemplateType) obj).type);
+        // }
+        // else if (obj instanceof IntType) {
+        //     return this.type == null || this.type.equals(((IntType) obj));
+        // }
+        // else if (obj instanceof ListType) {
+        //     return this.type == null || this.type.equals(((ListType) obj));
+        // }
+        // return false;
     }
 
     @Override
@@ -32,7 +39,7 @@ public class TemplateType implements AbstractType {
     @Override
     public String toString() {
         if (this.type == null) {
-            return "T";
+            return "Template";
         }
         return this.type.toString();
     }

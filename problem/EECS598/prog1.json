@@ -1,5 +1,6 @@
 {
-  "name": "prog0",
+  "name": "prog1",
+  "program": "(MAP HEAD input0)",
   "examples": [
     {
       "input": [

@@ -308,7 +308,10 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
             List<Integer> eq = new ArrayList<>();
             List<Integer> eq2 = new ArrayList<>();
             Pair pp = null;
-            assert (mapnew2old_.containsKey(p.t0)) : core;
+            // System.out.println(p.t0 + " " + mapnew2old_);
+            if (!mapnew2old_.containsKey(p.t0)) // TODO: Nicole
+                continue;
+            assert (mapnew2old_.containsKey(p.t0)) : mapnew2old_;
             int node_id = mapnew2old_.get(p.t0);
             if (seen.contains(node_id))
                 continue;
@@ -825,102 +828,10 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
             }
         }
 
-//        /* Domain specific constraints for R */
-//        // group_by can only be a child of summarise
-        if (prodName_.containsKey("summarise") && prodName_.containsKey("group_by")) {
-
-            for (int i = 0; i < maxLen_-1; i++) {
-                Node parent = highTrail_.get(i).t0;
-                Production g = prodName_.get("group_by");
-                Node child = highTrail_.get(i + 1).t0;
-                Production s = prodName_.get("summarise");
-                int v1 = varNodes_.get(new Pair<Integer, Production>(parent.id, g));
-                int v2 = varNodes_.get(new Pair<Integer, Production>(child.id, s));
-                assert (lineProductions_.get(i).size()==1);
-                Production itm = lineProductions_.get(i).get(0);
-                int v3 = varNodes_.get(new Pair<Integer, Production>(child.children.get(0).id, itm));
-                VecInt lits = new VecInt(new int[]{-v1, v2});
-                conflict = satUtils_.addClause(lits);
-                assert(!conflict);
-                VecInt lits2 = new VecInt(new int[]{-v1, v3});
-                conflict = satUtils_.addClause(lits2);
-                assert(!conflict);
-            }
-
-            // group_by cannot be at the root level
-            Node root = highTrail_.get(highTrail_.size()-1).t0;
-            Production gg = prodName_.get("group_by");
-            int var = varNodes_.get(new Pair<Integer, Production>(root.id, gg));
-            VecInt lits = new VecInt(new int[]{-var});
-            conflict = satUtils_.addClause(lits);
-            assert(!conflict);
-        }
-
-        if (prodName_.containsKey("filter") && prodName_.containsKey("select")){
-            // Filter select is equivalent to select filter
-            // Only allow one of them to happen
-            for (int i = 0; i < highTrail_.size()-1; i++){
-                Production f = prodName_.get("filter");
-                Production s = prodName_.get("select");
-                Node node = highTrail_.get(i).t0;
-                Node next = highTrail_.get(i+1).t0;
-                int v1 = varNodes_.get(new Pair<Integer, Production>(node.id, s));
-                int v2 = varNodes_.get(new Pair<Integer, Production>(next.id, f));
-                VecInt clause = new VecInt(new int[]{-v1,-v2});
-                conflict = satUtils_.addClause(clause);
-                assert(!conflict);
-
-                assert (lineProductions_.get(i).size()==1);
-                Production itm = lineProductions_.get(i).get(0);
-                int v3 = varNodes_.get(new Pair<Integer, Production>(next.children.get(0).id, itm));
-                VecInt lits2 = new VecInt(new int[]{-v1, v3});
-                conflict = satUtils_.addClause(lits2);
-                assert(!conflict);
-            }
-        }
-
-        if (prodName_.containsKey("mutate")){
-            // At most one mutate
-            VecInt clause = new VecInt();
-            for (int i = 0; i < highTrail_.size(); i++){
-                Production p = prodName_.get("mutate");
-                Node node = highTrail_.get(i).t0;
-                int var = varNodes_.get(new Pair<Integer,Production>(node.id, p));
-                clause.push(var);
-            }
-            conflict = satUtils_.addAMK(clause, 1);
-            assert(!conflict);
-        }
-
-        if (prodName_.containsKey("inner_join")){
-            // At most one mutate
-            VecInt clause = new VecInt();
-            for (int i = 0; i < highTrail_.size(); i++){
-                Production p = prodName_.get("inner_join");
-                Node node = highTrail_.get(i).t0;
-                int var = varNodes_.get(new Pair<Integer,Production>(node.id, p));
-                clause.push(var);
-            }
-            conflict = satUtils_.addAMK(clause, 1);
-            assert(!conflict);
-        }
-
-        if (prodName_.containsKey("filter")) {
-            VecInt clause = new VecInt();
-            for (int i = 0; i < highTrail_.size(); i++) {
-                Production p = prodName_.get("filter");
-                Node node = highTrail_.get(i).t0;
-                int var = varNodes_.get(new Pair<Integer, Production>(node.id, p));
-                clause.push(var);
-            }
-            conflict = satUtils_.addAMK(clause, 1);
-            assert(!conflict);
-        }
-
         /* Domain specific constraints for DeepCoder */
 
         String[] amo = {"ACCESS", "MAXIMUM", "COUNT", "MINIMUM", "SUM", "HEAD", "LAST", "FILTER", "SORT", "REVERSE", "TAKE", "DROP"};
-        String[] map = {"MAP-MUL","MAP-DIV","MAP-PLUS","MAP-POW"};
+        String[] map = {"MAP-MUL","MAP-DIV","MAP-PLUS","MAP-POW", "MAP-UNARY", "MAP-BINARY"};
         String[] zipwith = {"ZIPWITH-PLUS","ZIPWITH-MINUS","ZIPWITH-MUL","ZIPWITH-MIN","ZIPWITH-MAX"};
         String[] scanl1 = {"SCANL1-PLUS","SCANL1-MINUS","SCANL1-MUL","SCANL1-MIN","SCANL1-MAX"};
 
@@ -1196,10 +1107,22 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
         for (Production<T> prod : prods) {
 
             if (!prodTypes_.containsKey(prod.source.toString())) {
-                prodTypes_.put(prod.source.toString(), new ArrayList<Production>());
+                if (prod.source.toString().contains("Template")) {
+                    for (Object obj : grammar_.getAllTypes(prod.source)) {
+                        AbstractType t = (AbstractType) obj;
+                        if (!prodTypes_.containsKey(t.toString()))
+                            prodTypes_.put(t.toString(), new ArrayList<Production>());
+                    }
+                }
+                else {
+                    prodTypes_.put(prod.source.toString(), new ArrayList<Production>());
+                }
             }
 
-            prodTypes_.get(prod.source.toString()).add(prod);
+            for (Object obj : grammar_.getAllTypes(prod.source)) {
+                AbstractType t = (AbstractType) obj;
+                prodTypes_.get(t.toString()).add(prod);
+            }
 
             prodSymbols_.put(prod.function, prod.source);
 
@@ -2301,11 +2224,11 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
             // System.out.println("STEP Sketch: " + step_ + highTrail_);
             // System.out.println("currentLine = " + currentLine_ + " currentChild=" + currentChild_ + " trail=" + trail_ + " highTrail=" + highTrail_);
             if (step_ == 3) {
-
+                // System.out.println("step_ == 3 decideFirst highTrail: " + highTrail_);
 //                long s3 = LibUtils.tick();
 
                 // Fill line-by-line and only ask the deduction system after we have a full line
-                    //assert (currentLine_ < trail_.size());
+                    // assert (currentLine_ < trail_.size());
                     // System.out.println("currentLine = " + currentLine_ + " currentChild=" + currentChild_ + " trail=" + trail_ + " highTrail=" + highTrail_);
                     while (currentChild_ < trail_.get(currentLine_).size()) {
 //                        long s = LibUtils.tick();
@@ -2474,7 +2397,6 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
 
                             cpTrailSAT_.clear();
                             trailSAT_.copyTo(cpTrailSAT_);
-                            // System.out.println("HERE2 " + ast);
                             return ast;
                         }
 

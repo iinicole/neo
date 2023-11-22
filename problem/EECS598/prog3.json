@@ -1,5 +1,6 @@
 {
-  "name": "prog0",
+  "name": "prog3",
+  "program": "(MAP HEAD (GROUP (MAP HEAD input0)))",
   "examples": [
     {
       "input": [

@@ -149,24 +149,22 @@ public class DeepCoderGrammar implements Grammar<AbstractType> {
         productions.add(new Production<>(new ConstPosType(),"3"));
 
         productions.add(new Production<>(true, true, id++, new IntType(), "MAXIMUM", new ListType(new IntType())));
-        // productions.add(new Production<>(new UnopType(), "MAXIMUM_INPUT"));
         productions.add(new Production<>(false, true,id++,new IntType(), "COUNT", new ListType(new IntType()), new BinopBoolType(),new ConstNotZeroType()));
         productions.add(new Production<>(true, true, id++, new IntType(), "MINIMUM", new ListType(new IntType())));
         productions.add(new Production<>(true, true, id++,new IntType(), "SUM", new ListType(new IntType())));
         productions.add(new Production<>(true, true,id++,new TemplateType(), "HEAD", new ListType(new TemplateType())));
-        // productions.add(new Production<>(new UnopType(), "HEAD_INPUT"));
         productions.add(new Production<>(true, true,id++,new TemplateType(), "LAST", new ListType(new TemplateType())));
-        // productions.add(new Production<>(new UnopType(), "LAST_INPUT"));
         productions.add(new Production<>(false, true,id++,new TemplateType(), "ACCESS", new ListType(new TemplateType()), new IntType()));
 
         // ListType
-        productions.add(new Production<>(true, true,id++,new ListType(new IntType()), "MAP-MUL", new ListType(new IntType()), new ConstType()));
-        productions.add(new Production<>(true, true,id++,new ListType(new IntType()), "MAP-DIV", new ListType(new IntType()), new ConstNotZeroType()));
-        productions.add(new Production<>(true, true,id++,new ListType(new IntType()), "MAP-PLUS", new ListType(new IntType()), new ConstType()));
+        // productions.add(new Production<>(true, true,id++,new ListType(new IntType()), "MAP-MUL", new ListType(new IntType()), new ConstType()));
+        // productions.add(new Production<>(true, true,id++,new ListType(new IntType()), "MAP-DIV", new ListType(new IntType()), new ConstNotZeroType()));
+        // productions.add(new Production<>(true, true,id++,new ListType(new IntType()), "MAP-PLUS", new ListType(new IntType()), new ConstType()));
         productions.add(new Production<>(true, true,id++,new ListType(new IntType()), "MAP-POW", new ListType(new IntType()), new ConstPosType()));
 
         // added new productions
-        productions.add(new Production<>(false, true,id++,new ListType(new TemplateType()), "MAP", new UnopType(), new ListType(new ListType(new TemplateType()))));
+        productions.add(new Production<>(false, true,id++,new ListType(new TemplateType()), "MAP-UNARY", new UnopType(), new ListType(new ListType(new TemplateType()))));
+        productions.add(new Production<>(false, true,id++,new ListType(new IntType()), "MAP-BINARY", new BinopIntType(), new ConstType(), new ListType(new IntType())));
         productions.add(new Production<>(true, true,id++,new ListType(new ListType(new TemplateType())), "GROUP", new ListType(new TemplateType())));
 
         productions.add(new Production<>(false, true,id++,new ListType(new IntType()), "FILTER", new ListType(new IntType()), new BinopBoolType(),new ConstType()));
@@ -196,6 +194,12 @@ public class DeepCoderGrammar implements Grammar<AbstractType> {
         productions.add(new Production<>(new BinopBoolType(), "l(a,b).(!= a b)"));
         productions.add(new Production<>(new BinopBoolType(), "l(a,b).(%!= a b)"));
         productions.add(new Production<>(new BinopBoolType(), "l(a,b).(%= a b)"));
+
+        // plus mul div pow
+        productions.add(new Production<>(new BinopIntType(), "+"));
+        productions.add(new Production<>(new BinopIntType(), "*"));
+        productions.add(new Production<>(new BinopIntType(), "/"));
+        productions.add(new Production<>(new BinopIntType(), "^"));
 
         // iterate over all production rules and check if it is higher
         List<Production<AbstractType>> secondary_productions = new ArrayList<>();
@@ -293,18 +297,19 @@ public class DeepCoderGrammar implements Grammar<AbstractType> {
     @Override
     public List<AbstractType> getAllTypes(AbstractType type) {
         List<AbstractType> types = new ArrayList<>();
-        types.add(type);
         if (type instanceof TemplateType) {
             for (int i = 0; i < typeDist; i++) {
                 types.add(creatType(i));
             }
         }
-
-        if (type instanceof ListType) {
+        else if (type instanceof ListType) {
             List<AbstractType> innerTypes = getAllTypes(((ListType) type).type);
             for (AbstractType innerType : innerTypes) {
                 types.add(new ListType(innerType));
             }
+        }
+        else {
+            types.add(type);
         }
         return types;
     }

@@ -39,6 +39,7 @@ public class PrimitiveBinop implements Binop {
         } else if (this.op.equals("-")) {
             return (int) first - (int) second;
         } else if (this.op.equals("/")) {
+            if ((int) second == 0) return null;
             return (int) first / (int) second;
         } else if (this.op.equals("~")) {
             return !(boolean) first;

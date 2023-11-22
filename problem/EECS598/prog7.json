@@ -1,5 +1,6 @@
 {
-  "name": "prog0",
+  "name": "prog7",
+  "program": "(MAP MAXIMUM input0)",
   "examples": [
     {
       "input": [

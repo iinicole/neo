@@ -20,8 +20,8 @@ public class CountList implements Unop {
 
     public Object apply(Object obj) {
         if (obj instanceof  Integer){
-            assert ((Integer)obj == 256);
-            return new ArrayList<>();
+            // assert ((Integer)obj == 256);
+            return null;
         }
         List list = (List) obj;
         int cnt = 0;
@@ -29,6 +29,9 @@ public class CountList implements Unop {
             return cnt;
         } else {
             for (Object elem : list) {
+                if (!(elem instanceof Integer)) {
+                    return null;
+                }
                 if (op.toString().equals("l(a,b).(< a b)") && (Integer)elem < rhs) {
                     cnt++;
                 } else if (op.toString().equals("l(a,b).(> a b)") && (Integer)elem > rhs) {

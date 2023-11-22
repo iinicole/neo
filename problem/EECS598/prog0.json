@@ -1,5 +1,6 @@
 {
   "name": "prog0",
+  "program": "(GROUP input0)",
   "examples": [
     {
       "input": [
