@@ -173,8 +173,8 @@ public class DeepCoderGrammar implements Grammar<AbstractType> {
         // productions.add(new Production<>(false, true,id++,new ListType(new IntType()), "ZIPWITH-PLUS", new ListType(new IntType()), new ListType(new IntType())));
         // productions.add(new Production<>(false, true,id++,new ListType(new IntType()), "ZIPWITH-MINUS", new ListType(new IntType()), new ListType(new IntType())));
         // productions.add(new Production<>(false, true,id++,new ListType(new IntType()), "ZIPWITH-MUL", new ListType(new IntType()), new ListType(new IntType())));
-        productions.add(new Production<>(false, true,id++,new ListType(new IntType()), "ZIPWITH-MIN", new ListType(new IntType()), new ListType(new IntType())));
-        productions.add(new Production<>(false, true,id++,new ListType(new IntType()), "ZIPWITH-MAX", new ListType(new IntType()), new ListType(new IntType())));
+        // productions.add(new Production<>(false, true,id++,new ListType(new IntType()), "ZIPWITH-MIN", new ListType(new IntType()), new ListType(new IntType())));
+        // productions.add(new Production<>(false, true,id++,new ListType(new IntType()), "ZIPWITH-MAX", new ListType(new IntType()), new ListType(new IntType())));
 
         productions.add(new Production<>(true, true,id++,new ListType(new IntType()), "SORT", new ListType(new IntType())));
         productions.add(new Production<>(true, true,id++,new ListType(new IntType()), "REVERSE", new ListType(new IntType())));
@@ -202,6 +202,9 @@ public class DeepCoderGrammar implements Grammar<AbstractType> {
         productions.add(new Production<>(new BinopIntType(), "*"));
         productions.add(new Production<>(new BinopIntType(), "/"));
         productions.add(new Production<>(new BinopIntType(), "^"));
+
+        productions.add(new Production<>(new BinopIntType(), "MIN"));
+        productions.add(new Production<>(new BinopIntType(), "MAX"));
 
         // iterate over all production rules and check if it is higher
         List<Production<AbstractType>> secondary_productions = new ArrayList<>();
