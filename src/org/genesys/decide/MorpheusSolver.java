@@ -832,7 +832,7 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
 
         String[] amo = {"ACCESS", "MAXIMUM", "COUNT", "MINIMUM", "SUM", "HEAD", "LAST", "FILTER", "SORT", "REVERSE", "TAKE", "DROP"};
         String[] map = {"MAP-MUL","MAP-DIV","MAP-PLUS","MAP-POW", "MAP-UNARY", "MAP-BINARY"};
-        String[] zipwith = {"ZIPWITH-PLUS","ZIPWITH-MINUS","ZIPWITH-MUL","ZIPWITH-MIN","ZIPWITH-MAX"};
+        String[] zipwith = {"ZIPWITH-PLUS","ZIPWITH-MINUS","ZIPWITH-MUL","ZIPWITH-MIN","ZIPWITH-MAX", "ZIPWITH"};
         String[] scanl1 = {"SCANL1-PLUS","SCANL1-MINUS","SCANL1-MUL","SCANL1-MIN","SCANL1-MAX"};
 
         for (String s : amo){
@@ -1293,6 +1293,10 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
             // System.out.println("parent node: " + highTrail_.get(currentLine_).t0 + " currentChild: " + currentChild_ + " p: " + p);
             int var = varNodes_.get(new Pair<Integer, Production>(node.id, p));
             // System.out.println("highTrail: " + highTrail_ + ", p: " + p + ", node: " + node.id);
+            // if type does not match, skip
+            if (!p.source.equals(highTrail_.get(currentLine_).t0.decision.inputs[currentChild_])) {
+                continue;
+            }
             if (satUtils_.getSolver().truthValue(var) == Lbool.UNDEFINED ||
                     satUtils_.getSolver().truthValue(var) == Lbool.TRUE) {
                 // System.out.println("parent node: " + highTrail_.get(currentLine_).t0.decision + " child: " + p);
@@ -2268,7 +2272,7 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
                         } else {
                             if (highTrail_.get(currentLine_).t0.children.get(currentChild_).function.equals("")) {
                                 Node decision = decideFirst();
-                                // System.out.println("decideFirst highTrail: " + highTrail_ + " decision: " + decision);
+                                // System.out.println("decideFirst highTrail: " + highTrail_ + " currentLine: " + currentLine_ + "currentChild: " + currentChild_ + " decision: " + decision);
                                 if (decision == null) {
                                     // go back to step 2?
                                     step_ = 2;

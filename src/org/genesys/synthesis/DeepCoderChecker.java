@@ -92,7 +92,7 @@ public class DeepCoderChecker implements Checker<Problem, List<Pair<Integer, Lis
             String func = worker.function;
             //Get component spec.
             Component comp = components_.get(func);
-//            System.out.println("working on : " + func + " id:" + worker.id + " isconcrete:" + worker.isConcrete());
+        //    System.out.println("working on : " + func + " id:" + worker.id + " isconcrete:" + worker.isConcrete());
             if ("root".equals(func)) {
                 List<BoolExpr> abs = abstractDeepCode(worker, output);
                 List<BoolExpr> align = alignOutput(worker);

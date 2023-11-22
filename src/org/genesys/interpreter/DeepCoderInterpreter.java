@@ -138,11 +138,23 @@ public class DeepCoderInterpreter extends BaseInterpreter {
 //        );
 
         executors.put("FILTER", (objects, input) -> {
+                    if (!(objects.get(2) instanceof Integer)) {
+                        return new Maybe<>(null);
+                    }
+                    if (!(objects.get(1) instanceof Binop)) {
+                        return new Maybe<>(null);
+                    }
                 return new Maybe<>(new FilterLList((Binop) objects.get(1),(Integer)objects.get(2)).apply(objects.get(0)));
                 }
         );
 
         executors.put("COUNT", (objects, input) -> {
+                    if (!(objects.get(2) instanceof Integer)) {
+                        return new Maybe<>(null);
+                    }
+                    if (!(objects.get(1) instanceof Binop)) {
+                        return new Maybe<>(null);
+                    }
                     return new Maybe<>(new CountList((Binop) objects.get(1),(Integer)objects.get(2)).apply(objects.get(0)));
                 }
         );
