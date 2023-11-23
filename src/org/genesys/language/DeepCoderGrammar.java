@@ -130,13 +130,13 @@ public class DeepCoderGrammar implements Grammar<AbstractType> {
     public List<Production<AbstractType>> getProductions() {
         List<Production<AbstractType>> productions = new ArrayList<>();
         // IntType
-        productions.add(new Production<>(new ConstType(),"-3"));
-        productions.add(new Production<>(new ConstType(),"-2"));
-        productions.add(new Production<>(new ConstType(),"-1"));
-        productions.add(new Production<>(new ConstType(),"0"));
-        productions.add(new Production<>(new ConstType(),"1"));
-        productions.add(new Production<>(new ConstType(),"2"));
-        productions.add(new Production<>(new ConstType(),"3"));
+        productions.add(new Production<>(new IntType(),"-3"));
+        productions.add(new Production<>(new IntType(),"-2"));
+        productions.add(new Production<>(new IntType(),"-1"));
+        productions.add(new Production<>(new IntType(),"0"));
+        productions.add(new Production<>(new IntType(),"1"));
+        productions.add(new Production<>(new IntType(),"2"));
+        productions.add(new Production<>(new IntType(),"3"));
 
         // productions.add(new Production<>(new ConstNotZeroType(),"-3"));
         // productions.add(new Production<>(new ConstNotZeroType(),"-2"));
@@ -154,24 +154,24 @@ public class DeepCoderGrammar implements Grammar<AbstractType> {
         productions.add(new Production<>(true, true, id++,new IntType(), "SUM", new ListType(new IntType())));
         productions.add(new Production<>(true, true,id++,new TemplateType(), "HEAD", new ListType(new TemplateType())));
         productions.add(new Production<>(true, true,id++,new TemplateType(), "LAST", new ListType(new TemplateType())));
-        productions.add(new Production<>(false, true,id++,new TemplateType(), "ACCESS", new ListType(new TemplateType()), new IntType()));
+        productions.add(new Production<>(true, true,id++,new TemplateType(), "ACCESS", new ListType(new TemplateType()), new IntType()));
 
         // ListType
-        // productions.add(new Production<>(true, true,id++,new ListType(new IntType()), "MAP-MUL", new ListType(new IntType()), new ConstType()));
+        // productions.add(new Production<>(true, true,id++,new ListType(new IntType()), "MAP-MUL", new ListType(new IntType()), new IntType()));
         // productions.add(new Production<>(true, true,id++,new ListType(new IntType()), "MAP-DIV", new ListType(new IntType()), new ConstNotZeroType()));
-        // productions.add(new Production<>(true, true,id++,new ListType(new IntType()), "MAP-PLUS", new ListType(new IntType()), new ConstType()));
+        // productions.add(new Production<>(true, true,id++,new ListType(new IntType()), "MAP-PLUS", new ListType(new IntType()), new IntType()));
         // productions.add(new Production<>(true, true,id++,new ListType(new IntType()), "MAP-POW", new ListType(new IntType()), new ConstPosType()));
 
         // added new productions
         // productions.add(new Production<>(false, true,id++,new ListType(new TemplateType()), "MAP-UNARY", new UnopType(), new ListType(new ListType(new TemplateType()))));
         productions.add(new Production<>(false, true,id++,new ListType(new TemplateType()), "MAP-UNARY", new FunctionType(new ArrayList<>(List.of(new ListType(new TemplateType()))), new TemplateType()), new ListType(new ListType(new TemplateType()))));
-        productions.add(new Production<>(false, true,id++,new ListType(new IntType()), "MAP-BINARY", new BinopIntType(), new ConstType(), new ListType(new IntType())));
-        // productions.add(new Production<>(false, true,id++,new ListType(new IntType()), "MAP-BINARY", new FunctionType(new ArrayList<>(List.of(new ListType(new TemplateType()), new ConstType())), new TemplateType()), new ConstType(), new ListType(new IntType())));
+        // productions.add(new Production<>(false, true,id++,new ListType(new IntType()), "MAP-BINARY", new BinopIntType(), new IntType(), new ListType(new IntType())));
+        productions.add(new Production<>(false, true,id++,new ListType(new TemplateType()), "MAP-BINARY", new FunctionType(new ArrayList<>(List.of(new TemplateType(), new IntType())), new TemplateType()), new IntType(), new ListType(new TemplateType())));
         productions.add(new Production<>(true, true,id++,new ListType(new ListType(new TemplateType())), "GROUP", new ListType(new TemplateType())));
 
-        productions.add(new Production<>(false, true,id++,new ListType(new IntType()), "FILTER", new ListType(new IntType()), new BinopBoolType(), new ConstType()));
+        productions.add(new Production<>(false, true,id++,new ListType(new IntType()), "FILTER", new ListType(new IntType()), new BinopBoolType(), new IntType()));
 
-        productions.add(new Production<>(false, true,id++,new ListType(new IntType()), "ZIPWITH", new ListType(new IntType()), new ListType(new IntType()), new BinopIntType()));
+        productions.add(new Production<>(false, true,id++,new ListType(new IntType()), "ZIPWITH", new ListType(new IntType()), new ListType(new IntType()), new FunctionType(new ArrayList<>(List.of(new IntType(), new IntType())), new TemplateType())));
         // productions.add(new Production<>(false, true,id++,new ListType(new IntType()), "ZIPWITH-PLUS", new ListType(new IntType()), new ListType(new IntType())));
         // productions.add(new Production<>(false, true,id++,new ListType(new IntType()), "ZIPWITH-MINUS", new ListType(new IntType()), new ListType(new IntType())));
         // productions.add(new Production<>(false, true,id++,new ListType(new IntType()), "ZIPWITH-MUL", new ListType(new IntType()), new ListType(new IntType())));
@@ -181,7 +181,7 @@ public class DeepCoderGrammar implements Grammar<AbstractType> {
         productions.add(new Production<>(true, true,id++,new ListType(new IntType()), "SORT", new ListType(new IntType())));
         productions.add(new Production<>(true, true,id++,new ListType(new IntType()), "REVERSE", new ListType(new IntType())));
 
-        productions.add(new Production<>(false, true,id++,new ListType(new IntType()), "SCANL", new ListType(new IntType()), new BinopIntType()));
+        productions.add(new Production<>(false, true,id++,new ListType(new IntType()), "SCANL", new ListType(new IntType()), new FunctionType(new ArrayList<>(List.of(new IntType(), new IntType())), new TemplateType())));
         // productions.add(new Production<>(true, true,id++,new ListType(new IntType()), "SCANL-PLUS", new ListType(new IntType())));
         // productions.add(new Production<>(true, true,id++,new ListType(new IntType()), "SCANL-MINUS", new ListType(new IntType())));
         // productions.add(new Production<>(true, true,id++,new ListType(new IntType()), "SCANL-MUL", new ListType(new IntType())));
@@ -200,23 +200,27 @@ public class DeepCoderGrammar implements Grammar<AbstractType> {
         productions.add(new Production<>(new BinopBoolType(), "l(a,b).(%= a b)"));
 
         // plus mul div pow
-        productions.add(new Production<>(new BinopIntType(), "+"));
-        // productions.add(new Production<>(new BinopIntType(), "-"));
-        productions.add(new Production<>(new BinopIntType(), "*"));
-        productions.add(new Production<>(new BinopIntType(), "/"));
-        productions.add(new Production<>(new BinopIntType(), "^"));
+        // productions.add(new Production<>(new BinopIntType(), "+"));
+        // // productions.add(new Production<>(new BinopIntType(), "-"));
+        // productions.add(new Production<>(new BinopIntType(), "*"));
+        // productions.add(new Production<>(new BinopIntType(), "/"));
+        // productions.add(new Production<>(new BinopIntType(), "^"));
 
-        productions.add(new Production<>(new BinopIntType(), "MIN"));
-        productions.add(new Production<>(new BinopIntType(), "MAX"));
+        // productions.add(new Production<>(new BinopIntType(), "MIN"));
+        // productions.add(new Production<>(new BinopIntType(), "MAX"));
+
+        productions.add(new Production<>(new FunctionType(new ArrayList<>(List.of(new IntType(), new IntType())), new IntType()), "+"));
+        productions.add(new Production<>(new FunctionType(new ArrayList<>(List.of(new IntType(), new IntType())), new IntType()), "*"));
+        productions.add(new Production<>(new FunctionType(new ArrayList<>(List.of(new IntType(), new IntType())), new IntType()), "/"));
+        productions.add(new Production<>(new FunctionType(new ArrayList<>(List.of(new IntType(), new IntType())), new IntType()), "^"));
+
+        productions.add(new Production<>(new FunctionType(new ArrayList<>(List.of(new IntType(), new IntType())), new IntType()), "MIN"));
+        productions.add(new Production<>(new FunctionType(new ArrayList<>(List.of(new IntType(), new IntType())), new IntType()), "MAX"));
 
         // iterate over all production rules and check if it is higher
         List<Production<AbstractType>> secondary_productions = new ArrayList<>();
         for (Production<AbstractType> production : productions) {
             if (production.canBeInput) {
-                // assert number of inputs is 1
-                if (production.inputs.length == 1) {
-                    secondary_productions.add(new Production<>(new UnopType(), production.function + "_FUNCTION2"));
-                }
                 // add in all input types
                 ArrayList<AbstractType> inputTypes = new ArrayList<>();
                 for (AbstractType inputType : production.inputs) {

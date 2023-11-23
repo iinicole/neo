@@ -105,8 +105,12 @@ public class DeepCoderInterpreter extends BaseInterpreter {
             return new Maybe<>(new ReverseUnop().apply(objects.get(0)));
         });
 
-        executors.put("MAP-UNARY", (objects, input) ->
-                new Maybe<>(new MapLList((Unop) objects.get(0)).apply(objects.get(1)))
+        executors.put("MAP-UNARY", (objects, input) -> {
+            if (objects.size() != 2 || !(objects.get(0) instanceof Unop) || !(objects.get(1) instanceof List)) {
+                return new Maybe<>(null);
+            }
+            return new Maybe<>(new MapLList((Unop) objects.get(0)).apply(objects.get(1)));
+        }
         );
 
         executors.put("MAP-BINARY", (objects, input) -> {
@@ -117,12 +121,9 @@ public class DeepCoderInterpreter extends BaseInterpreter {
             if (objects.get(0) instanceof Binop) {
                 return new Maybe<>(new MapLList(new HigherUnop((Binop) objects.get(0), (Integer) objects.get(1))).apply(objects.get(2)));
             }
-            // else if (objects.get(0) instanceof Unop) {
-            //     List args = new ArrayList();
-            //     args.add(objects.get(1));
-            //     args.add(objects.get(2));
-            //     return new Maybe<>(new MapLList(new HigherUnop((Unop) objects.get(0))).apply(args));
-            // }
+            else if (objects.get(0) instanceof Unop) {
+                return new Maybe<>(new MapLList(new HigherUnop((Unop) objects.get(0), (Integer) objects.get(1))).apply(objects.get(2)));
+            }
             return new Maybe<>(null);
         }
         );

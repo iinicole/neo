@@ -1,5 +1,8 @@
 package org.genesys.interpreter;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 /**
  * Created by yufeng on 5/31/17.
  */
@@ -14,9 +17,9 @@ public class HigherUnop implements Unop {
         this.unop = null;
     }
 
-    public HigherUnop(Unop op) {
+    public HigherUnop(Unop op, Integer val) {
         this.unop = op;
-        this.val = null;
+        this.val = val;
         this.binop = null;
     }
 
@@ -24,7 +27,7 @@ public class HigherUnop implements Unop {
         if (this.binop != null) {
             return this.binop.apply(obj, this.val);
         } else {
-            return this.unop.apply(obj);
+            return this.unop.apply(new ArrayList<Object>(Arrays.asList(obj, this.val)));
         }
     }
 

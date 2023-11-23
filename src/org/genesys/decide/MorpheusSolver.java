@@ -2093,8 +2093,8 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
                         Constr conflict = satUtils_.propagate();
 //                        long e = LibUtils.tick();
 //                        propagateTime_ += LibUtils.computeTime(s,e);
-                        // System.out.println(currentLine_ + " " +  currentChild_ + " " + trail_.get(currentLine_));
-                        // System.out.println("Conflict Sketch: " + conflict + trail_);
+                        // System.out.println(currentLine_ + " " +  currentChild_ + " " + highTrail_);
+                        // System.out.println("Conflict Sketch: " + conflict + highTrail_);
                         if (conflict != null) {
                             int backjumpLevel = satUtils_.analyzeSATConflict(conflict);
                             int neoLevel = convertLevelFromSATtoNeo(backjumpLevel);
@@ -2403,6 +2403,7 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
 
                             cpTrailSAT_.clear();
                             trailSAT_.copyTo(cpTrailSAT_);
+                            // System.out.println("AST: " + ast);
                             return ast;
                         }
 

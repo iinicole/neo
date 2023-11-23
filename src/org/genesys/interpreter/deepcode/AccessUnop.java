@@ -1,5 +1,6 @@
 package org.genesys.interpreter.deepcode;
 
+import org.genesys.interpreter.Binop;
 import org.genesys.interpreter.Unop;
 
 import java.util.List;
@@ -9,13 +10,21 @@ import java.util.List;
  */
 public class AccessUnop implements Unop {
 
-    private int n;
+    private Integer n;
 
-    public AccessUnop() {
+    public AccessUnop(int n) {
         this.n = n;
     }
 
+    public AccessUnop() {
+        this.n = null;
+    }
+
     public Object apply(Object obj) {
+        if (n != null) {
+            return access(obj, n);
+        }
+        
         if (!(obj instanceof List))
             return null;
         List pair = (List) obj;
@@ -28,13 +37,19 @@ public class AccessUnop implements Unop {
         assert pair.get(1) instanceof Integer;
         List xs = (List) pair.get(0);
         int n = (Integer) pair.get(1);
-        Object res = 256;
-        if (n < 0)
+        return access(xs, n);
+    }
+
+    private Object access(Object obj, int idx) {
+        if (!(obj instanceof List))
             return null;
-        else if (xs.size() > n) {
-            res = xs.get(n);
+        List xs = (List) obj;
+        if (idx < 0)
+            return null;
+        else if (xs.size() > idx) {
+            return xs.get(idx);
         }
-        return res;
+        return null;
     }
 
     public String toString() {
