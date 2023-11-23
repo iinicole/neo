@@ -85,7 +85,12 @@ public class DeepCoderInterpreter extends BaseInterpreter {
             return new Maybe<>(new HeadUnop().apply(objects.get(0)));
         });
         executors.put("DROP", (objects, input) -> new Maybe<>(new DropUnop().apply(objects)));
-        executors.put("ACCESS", (objects, input) -> new Maybe<>(new AccessUnop().apply(objects)));
+        executors.put("ACCESS", (objects, input) -> {
+            if (objects.size() == 0) {
+                return new Maybe<>(new AccessUnop());
+            }
+            return new Maybe<>(new AccessUnop().apply(objects));
+        });
 
         executors.put("SORT", (objects, input) -> {
             if (objects.size() == 0) {
@@ -104,8 +109,22 @@ public class DeepCoderInterpreter extends BaseInterpreter {
                 new Maybe<>(new MapLList((Unop) objects.get(0)).apply(objects.get(1)))
         );
 
-        executors.put("MAP-BINARY", (objects, input) ->
-                new Maybe<>(new MapLList(new HigherUnop((Binop) objects.get(0), (Integer) objects.get(1))).apply(objects.get(2)))
+        executors.put("MAP-BINARY", (objects, input) -> {
+            if (objects.size() != 3 || !(objects.get(1) instanceof Integer) || !(objects.get(2) instanceof List)) {
+                return new Maybe<>(null);
+            }
+
+            if (objects.get(0) instanceof Binop) {
+                return new Maybe<>(new MapLList(new HigherUnop((Binop) objects.get(0), (Integer) objects.get(1))).apply(objects.get(2)));
+            }
+            // else if (objects.get(0) instanceof Unop) {
+            //     List args = new ArrayList();
+            //     args.add(objects.get(1));
+            //     args.add(objects.get(2));
+            //     return new Maybe<>(new MapLList(new HigherUnop((Unop) objects.get(0))).apply(args));
+            // }
+            return new Maybe<>(null);
+        }
         );
 
         // executors.put("MAP-HEAD", (objects, input) ->
@@ -120,18 +139,18 @@ public class DeepCoderInterpreter extends BaseInterpreter {
             return new Maybe<>(new GroupUnop().apply(objects.get(0)));
         });
 
-        executors.put("MAP-MUL", (objects, input) ->
-                new Maybe<>(new MapLList((Unop)new PrimitiveUnop("*", objects.get(1))).apply(objects.get(0)))
-        );
-        executors.put("MAP-DIV", (objects, input) ->
-                new Maybe<>(new MapLList((Unop)new PrimitiveUnop("/", objects.get(1))).apply(objects.get(0)))
-        );
-        executors.put("MAP-PLUS", (objects, input) ->
-                new Maybe<>(new MapLList((Unop)new PrimitiveUnop("+", objects.get(1))).apply(objects.get(0)))
-        );
-        executors.put("MAP-POW", (objects, input) ->
-                new Maybe<>(new MapLList((Unop)new PrimitiveUnop("^", objects.get(1))).apply(objects.get(0)))
-        );
+        // executors.put("MAP-MUL", (objects, input) ->
+        //         new Maybe<>(new MapLList((Unop)new PrimitiveUnop("*", objects.get(1))).apply(objects.get(0)))
+        // );
+        // executors.put("MAP-DIV", (objects, input) ->
+        //         new Maybe<>(new MapLList((Unop)new PrimitiveUnop("/", objects.get(1))).apply(objects.get(0)))
+        // );
+        // executors.put("MAP-PLUS", (objects, input) ->
+        //         new Maybe<>(new MapLList((Unop)new PrimitiveUnop("+", objects.get(1))).apply(objects.get(0)))
+        // );
+        // executors.put("MAP-POW", (objects, input) ->
+        //         new Maybe<>(new MapLList((Unop)new PrimitiveUnop("^", objects.get(1))).apply(objects.get(0)))
+        // );
 
 //        executors.put("FILTER", (objects, input) ->
 //                new Maybe<>(new FilterLList((Unop) objects.get(1)).apply(objects.get(0)))
@@ -173,45 +192,45 @@ public class DeepCoderInterpreter extends BaseInterpreter {
             return new Maybe<>(new ZipWith((Binop) objects.get(2)).apply(args));
         });
 
-        executors.put("ZIPWITH-PLUS", (objects, input) -> {
-            List args = new ArrayList();
-            args.add(objects.get(0));
-            args.add(objects.get(1));
-            Binop bop = new PrimitiveBinop("+");
-            return new Maybe<>(new ZipWith((Binop) bop).apply(args));
-        });
+        // executors.put("ZIPWITH-PLUS", (objects, input) -> {
+        //     List args = new ArrayList();
+        //     args.add(objects.get(0));
+        //     args.add(objects.get(1));
+        //     Binop bop = new PrimitiveBinop("+");
+        //     return new Maybe<>(new ZipWith((Binop) bop).apply(args));
+        // });
 
-        executors.put("ZIPWITH-MINUS", (objects, input) -> {
-            List args = new ArrayList();
-            args.add(objects.get(0));
-            args.add(objects.get(1));
-            Binop bop = new PrimitiveBinop("-");
-            return new Maybe<>(new ZipWith((Binop) bop).apply(args));
-        });
+        // executors.put("ZIPWITH-MINUS", (objects, input) -> {
+        //     List args = new ArrayList();
+        //     args.add(objects.get(0));
+        //     args.add(objects.get(1));
+        //     Binop bop = new PrimitiveBinop("-");
+        //     return new Maybe<>(new ZipWith((Binop) bop).apply(args));
+        // });
 
-        executors.put("ZIPWITH-MUL", (objects, input) -> {
-            List args = new ArrayList();
-            args.add(objects.get(0));
-            args.add(objects.get(1));
-            Binop bop = new PrimitiveBinop("*");
-            return new Maybe<>(new ZipWith((Binop) bop).apply(args));
-        });
+        // executors.put("ZIPWITH-MUL", (objects, input) -> {
+        //     List args = new ArrayList();
+        //     args.add(objects.get(0));
+        //     args.add(objects.get(1));
+        //     Binop bop = new PrimitiveBinop("*");
+        //     return new Maybe<>(new ZipWith((Binop) bop).apply(args));
+        // });
 
-        executors.put("ZIPWITH-MIN", (objects, input) -> {
-            List args = new ArrayList();
-            args.add(objects.get(0));
-            args.add(objects.get(1));
-            Binop bop = new MinBinop();
-            return new Maybe<>(new ZipWith((Binop) bop).apply(args));
-        });
+        // executors.put("ZIPWITH-MIN", (objects, input) -> {
+        //     List args = new ArrayList();
+        //     args.add(objects.get(0));
+        //     args.add(objects.get(1));
+        //     Binop bop = new MinBinop();
+        //     return new Maybe<>(new ZipWith((Binop) bop).apply(args));
+        // });
 
-        executors.put("ZIPWITH-MAX", (objects, input) -> {
-            List args = new ArrayList();
-            args.add(objects.get(0));
-            args.add(objects.get(1));
-            Binop bop = new MaxBinop();
-            return new Maybe<>(new ZipWith((Binop) bop).apply(args));
-        });
+        // executors.put("ZIPWITH-MAX", (objects, input) -> {
+        //     List args = new ArrayList();
+        //     args.add(objects.get(0));
+        //     args.add(objects.get(1));
+        //     Binop bop = new MaxBinop();
+        //     return new Maybe<>(new ZipWith((Binop) bop).apply(args));
+        // });
 
 
         executors.put("SCANL", (objects, input) -> {
@@ -219,45 +238,45 @@ public class DeepCoderInterpreter extends BaseInterpreter {
             return new Maybe<>(new Scanl((Binop) objects.get(1)).apply(objects.get(0)));
         });
 
-        executors.put("SCANL-PLUS", (objects, input) -> {
-            Binop bop = new PrimitiveBinop("+");
-            if (objects.size() == 0) {
-                return new Maybe<>(new Scanl(bop));
-            }
-            return new Maybe<>(new Scanl(bop).apply(objects.get(0)));
-        });
+        // executors.put("SCANL-PLUS", (objects, input) -> {
+        //     Binop bop = new PrimitiveBinop("+");
+        //     if (objects.size() == 0) {
+        //         return new Maybe<>(new Scanl(bop));
+        //     }
+        //     return new Maybe<>(new Scanl(bop).apply(objects.get(0)));
+        // });
 
-        executors.put("SCANL-MINUS", (objects, input) -> {
-            Binop bop = new PrimitiveBinop("-");
-            if (objects.size() == 0) {
-                return new Maybe<>(new Scanl(bop));
-            }
-            return new Maybe<>(new Scanl(bop).apply(objects.get(0)));
-        });
+        // executors.put("SCANL-MINUS", (objects, input) -> {
+        //     Binop bop = new PrimitiveBinop("-");
+        //     if (objects.size() == 0) {
+        //         return new Maybe<>(new Scanl(bop));
+        //     }
+        //     return new Maybe<>(new Scanl(bop).apply(objects.get(0)));
+        // });
 
-        executors.put("SCANL-MUL", (objects, input) -> {
-            Binop bop = new PrimitiveBinop("*");
-            if (objects.size() == 0) {
-                return new Maybe<>(new Scanl(bop));
-            }
-            return new Maybe<>(new Scanl(bop).apply(objects.get(0)));
-        });
+        // executors.put("SCANL-MUL", (objects, input) -> {
+        //     Binop bop = new PrimitiveBinop("*");
+        //     if (objects.size() == 0) {
+        //         return new Maybe<>(new Scanl(bop));
+        //     }
+        //     return new Maybe<>(new Scanl(bop).apply(objects.get(0)));
+        // });
 
-        executors.put("SCANL-MIN", (objects, input) -> {
-            Binop bop = new MinBinop();
-            if (objects.size() == 0) {
-                return new Maybe<>(new Scanl(bop));
-            }
-            return new Maybe<>(new Scanl(bop).apply(objects.get(0)));
-        });
+        // executors.put("SCANL-MIN", (objects, input) -> {
+        //     Binop bop = new MinBinop();
+        //     if (objects.size() == 0) {
+        //         return new Maybe<>(new Scanl(bop));
+        //     }
+        //     return new Maybe<>(new Scanl(bop).apply(objects.get(0)));
+        // });
 
-        executors.put("SCANL-MAX", (objects, input) -> {
-            Binop bop = new MaxBinop();
-            if (objects.size() == 0) {
-                return new Maybe<>(new Scanl(bop));
-            }
-            return new Maybe<>(new Scanl(bop).apply(objects.get(0)));
-        });
+        // executors.put("SCANL-MAX", (objects, input) -> {
+        //     Binop bop = new MaxBinop();
+        //     if (objects.size() == 0) {
+        //         return new Maybe<>(new Scanl(bop));
+        //     }
+        //     return new Maybe<>(new Scanl(bop).apply(objects.get(0)));
+        // });
 
 
         executors.put("TAKE", (objects, input) -> {
@@ -294,6 +313,7 @@ public class DeepCoderInterpreter extends BaseInterpreter {
             // if name is not yet in executors
             if (!executors.containsKey(p.function)) {
                 executors.put(p.function, (objects, input) -> {
+                    assert p.function.contains("_");
                     String name = p.function.split("_")[0];
                     assert executors.containsKey(name) : name;
                     // System.out.println(name);

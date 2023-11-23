@@ -15,7 +15,7 @@ public class DeepCoderGrammar implements Grammar<AbstractType> {
 
     private int id = 1;
 
-    private int typeDist = 5;
+    private int typeDist = 3;
 
     public AbstractType inputType;
 
@@ -163,8 +163,10 @@ public class DeepCoderGrammar implements Grammar<AbstractType> {
         // productions.add(new Production<>(true, true,id++,new ListType(new IntType()), "MAP-POW", new ListType(new IntType()), new ConstPosType()));
 
         // added new productions
-        productions.add(new Production<>(false, true,id++,new ListType(new TemplateType()), "MAP-UNARY", new UnopType(), new ListType(new ListType(new TemplateType()))));
+        // productions.add(new Production<>(false, true,id++,new ListType(new TemplateType()), "MAP-UNARY", new UnopType(), new ListType(new ListType(new TemplateType()))));
+        productions.add(new Production<>(false, true,id++,new ListType(new TemplateType()), "MAP-UNARY", new FunctionType(new ArrayList<>(List.of(new ListType(new TemplateType()))), new TemplateType()), new ListType(new ListType(new TemplateType()))));
         productions.add(new Production<>(false, true,id++,new ListType(new IntType()), "MAP-BINARY", new BinopIntType(), new ConstType(), new ListType(new IntType())));
+        // productions.add(new Production<>(false, true,id++,new ListType(new IntType()), "MAP-BINARY", new FunctionType(new ArrayList<>(List.of(new ListType(new TemplateType()), new ConstType())), new TemplateType()), new ConstType(), new ListType(new IntType())));
         productions.add(new Production<>(true, true,id++,new ListType(new ListType(new TemplateType())), "GROUP", new ListType(new TemplateType())));
 
         productions.add(new Production<>(false, true,id++,new ListType(new IntType()), "FILTER", new ListType(new IntType()), new BinopBoolType(), new ConstType()));
@@ -179,7 +181,7 @@ public class DeepCoderGrammar implements Grammar<AbstractType> {
         productions.add(new Production<>(true, true,id++,new ListType(new IntType()), "SORT", new ListType(new IntType())));
         productions.add(new Production<>(true, true,id++,new ListType(new IntType()), "REVERSE", new ListType(new IntType())));
 
-        productions.add(new Production<>(true, true,id++,new ListType(new IntType()), "SCANL", new ListType(new IntType()), new BinopIntType()));
+        productions.add(new Production<>(false, true,id++,new ListType(new IntType()), "SCANL", new ListType(new IntType()), new BinopIntType()));
         // productions.add(new Production<>(true, true,id++,new ListType(new IntType()), "SCANL-PLUS", new ListType(new IntType())));
         // productions.add(new Production<>(true, true,id++,new ListType(new IntType()), "SCANL-MINUS", new ListType(new IntType())));
         // productions.add(new Production<>(true, true,id++,new ListType(new IntType()), "SCANL-MUL", new ListType(new IntType())));
@@ -213,8 +215,14 @@ public class DeepCoderGrammar implements Grammar<AbstractType> {
             if (production.canBeInput) {
                 // assert number of inputs is 1
                 if (production.inputs.length == 1) {
-                    secondary_productions.add(new Production<>(new UnopType(), production.function + "_FUNCTION"));
+                    secondary_productions.add(new Production<>(new UnopType(), production.function + "_FUNCTION2"));
                 }
+                // add in all input types
+                ArrayList<AbstractType> inputTypes = new ArrayList<>();
+                for (AbstractType inputType : production.inputs) {
+                    inputTypes.add(inputType);
+                }
+                secondary_productions.add(new Production<>(new FunctionType(inputTypes, production.source), production.function + "_FUNCTION"));
             }
         }
         productions.addAll(secondary_productions);
@@ -224,79 +232,79 @@ public class DeepCoderGrammar implements Grammar<AbstractType> {
     @Override
     public List<Production<AbstractType>> productionsFor(AbstractType symbol) {
         List<Production<AbstractType>> productions = new ArrayList<>();
-        if (symbol instanceof InitType) {
-            InitType type = (InitType) symbol;
-            productions.add(new Production<>(symbol, "root", type.goalType));
-        } else if (symbol instanceof IntType) {
-            productions.add(new Production<>(new IntType(), "MAXIMUM", new ListType(new IntType())));
-            productions.add(new Production<>(new IntType(), "MINIMUM", new ListType(new IntType())));
-            productions.add(new Production<>(new IntType(), "SUM", new ListType(new IntType())));
-            productions.add(new Production<>(new IntType(), "HEAD", new ListType(new IntType())));
-            productions.add(new Production<>(new IntType(), "LAST", new ListType(new IntType())));
-            productions.add(new Production<>(new IntType(), "COUNT", new ListType(new IntType()), new FunctionType(new IntType(), new BoolType())));
-            productions.add(new Production<>(new IntType(), "ACCESS", new ListType(new IntType()), new IntType()));
+        // if (symbol instanceof InitType) {
+        //     InitType type = (InitType) symbol;
+        //     productions.add(new Production<>(symbol, "root", type.goalType));
+        // } else if (symbol instanceof IntType) {
+        //     productions.add(new Production<>(new IntType(), "MAXIMUM", new ListType(new IntType())));
+        //     productions.add(new Production<>(new IntType(), "MINIMUM", new ListType(new IntType())));
+        //     productions.add(new Production<>(new IntType(), "SUM", new ListType(new IntType())));
+        //     productions.add(new Production<>(new IntType(), "HEAD", new ListType(new IntType())));
+        //     productions.add(new Production<>(new IntType(), "LAST", new ListType(new IntType())));
+        //     productions.add(new Production<>(new IntType(), "COUNT", new ListType(new IntType()), new FunctionType(new IntType(), new BoolType())));
+        //     productions.add(new Production<>(new IntType(), "ACCESS", new ListType(new IntType()), new IntType()));
 
-        } else if (symbol instanceof ListType) {
-            // ListType -- only considering lists of IntType
-            productions.add(new Production<>(new ListType(new IntType()), "FILTER", new ListType(new IntType()), new FunctionType(new IntType(), new BoolType())
-            ));
-            productions.add(new Production<>(new ListType(new IntType()), "MAP", new ListType(new IntType()), new FunctionType(new IntType(), new IntType())
-            ));
-            productions.add(new Production<>(new ListType(new IntType()), "ZIPWITH",
-                    new ListType(new IntType()), new ListType(new IntType()), new FunctionType(new PairType(new IntType(), new IntType()), new IntType())));
-            productions.add(new Production<>(new ListType(new IntType()), "SORT", new ListType(new IntType())));
-            productions.add(new Production<>(new ListType(new IntType()), "REVERSE", new ListType(new IntType())));
-            productions.add(new Production<>(new ListType(new IntType()), "SCANL", new FunctionType(new PairType(new IntType(),
-                    new IntType()), new IntType()), new ListType(new IntType())));
+        // } else if (symbol instanceof ListType) {
+        //     // ListType -- only considering lists of IntType
+        //     productions.add(new Production<>(new ListType(new IntType()), "FILTER", new ListType(new IntType()), new FunctionType(new IntType(), new BoolType())
+        //     ));
+        //     productions.add(new Production<>(new ListType(new IntType()), "MAP", new ListType(new IntType()), new FunctionType(new IntType(), new IntType())
+        //     ));
+        //     productions.add(new Production<>(new ListType(new IntType()), "ZIPWITH",
+        //             new ListType(new IntType()), new ListType(new IntType()), new FunctionType(new PairType(new IntType(), new IntType()), new IntType())));
+        //     productions.add(new Production<>(new ListType(new IntType()), "SORT", new ListType(new IntType())));
+        //     productions.add(new Production<>(new ListType(new IntType()), "REVERSE", new ListType(new IntType())));
+        //     productions.add(new Production<>(new ListType(new IntType()), "SCANL", new FunctionType(new PairType(new IntType(),
+        //             new IntType()), new IntType()), new ListType(new IntType())));
 
 
-            productions.add(new Production<>(new ListType(new IntType()), "TAKE", new ListType(new IntType()), new IntType()));
-            productions.add(new Production<>(new ListType(new IntType()), "DROP", new ListType(new IntType()), new IntType()));
-        } else if (symbol instanceof FunctionType) {
-            FunctionType type = (FunctionType) symbol;
-            if ((type.inputType instanceof IntType) && (type.outputType instanceof BoolType)) {
-                productions.add(new Production<>(new FunctionType(new IntType(), new BoolType()), "isPOS", new IntType()));
-                productions.add(new Production<>(new FunctionType(new IntType(), new BoolType()), "isNEG", new IntType()));
-                productions.add(new Production<>(new FunctionType(new IntType(), new BoolType()), "isODD", new IntType()));
-                productions.add(new Production<>(new FunctionType(new IntType(), new BoolType()), "isEVEN", new IntType()));
-            }
+        //     productions.add(new Production<>(new ListType(new IntType()), "TAKE", new ListType(new IntType()), new IntType()));
+        //     productions.add(new Production<>(new ListType(new IntType()), "DROP", new ListType(new IntType()), new IntType()));
+        // } else if (symbol instanceof FunctionType) {
+        //     FunctionType type = (FunctionType) symbol;
+        //     if ((type.inputType instanceof IntType) && (type.outputType instanceof BoolType)) {
+        //         productions.add(new Production<>(new FunctionType(new IntType(), new BoolType()), "isPOS", new IntType()));
+        //         productions.add(new Production<>(new FunctionType(new IntType(), new BoolType()), "isNEG", new IntType()));
+        //         productions.add(new Production<>(new FunctionType(new IntType(), new BoolType()), "isODD", new IntType()));
+        //         productions.add(new Production<>(new FunctionType(new IntType(), new BoolType()), "isEVEN", new IntType()));
+        //     }
 
-            if ((type.inputType instanceof IntType) && (type.outputType instanceof IntType)) {
-                productions.add(new Production<>(new FunctionType(new IntType(), new IntType()), "MUL3"));
-                productions.add(new Production<>(new FunctionType(new IntType(), new IntType()), "MUL4"));
-                productions.add(new Production<>(new FunctionType(new IntType(), new IntType()), "DIV3"));
-                productions.add(new Production<>(new FunctionType(new IntType(), new IntType()), "DIV4"));
+        //     if ((type.inputType instanceof IntType) && (type.outputType instanceof IntType)) {
+        //         productions.add(new Production<>(new FunctionType(new IntType(), new IntType()), "MUL3"));
+        //         productions.add(new Production<>(new FunctionType(new IntType(), new IntType()), "MUL4"));
+        //         productions.add(new Production<>(new FunctionType(new IntType(), new IntType()), "DIV3"));
+        //         productions.add(new Production<>(new FunctionType(new IntType(), new IntType()), "DIV4"));
 
-                productions.add(new Production<>(new FunctionType(new IntType(), new IntType()), "INC"));
-                productions.add(new Production<>(new FunctionType(new IntType(), new IntType()), "DEC"));
+        //         productions.add(new Production<>(new FunctionType(new IntType(), new IntType()), "INC"));
+        //         productions.add(new Production<>(new FunctionType(new IntType(), new IntType()), "DEC"));
 
-                productions.add(new Production<>(new FunctionType(new IntType(), new IntType()), "SHL"));
-                productions.add(new Production<>(new FunctionType(new IntType(), new IntType()), "SHR"));
+        //         productions.add(new Production<>(new FunctionType(new IntType(), new IntType()), "SHL"));
+        //         productions.add(new Production<>(new FunctionType(new IntType(), new IntType()), "SHR"));
 
-                productions.add(new Production<>(new FunctionType(new IntType(), new IntType()), "SQR"));
-                productions.add(new Production<>(new FunctionType(new IntType(), new IntType()), "doNEG"));
+        //         productions.add(new Production<>(new FunctionType(new IntType(), new IntType()), "SQR"));
+        //         productions.add(new Production<>(new FunctionType(new IntType(), new IntType()), "doNEG"));
 
-            }
+        //     }
 
-            if (type.inputType instanceof PairType) {
-                //FunctionType
-                productions.add(new Production<>(new FunctionType(new PairType(new IntType(), new IntType()), new IntType()), "+"));
-                productions.add(new Production<>(new FunctionType(new PairType(new IntType(), new IntType()), new IntType()), "-"));
-                productions.add(new Production<>(new FunctionType(new PairType(new IntType(), new IntType()), new IntType()), "*"));
+        //     if (type.inputType instanceof PairType) {
+        //         //FunctionType
+        //         productions.add(new Production<>(new FunctionType(new PairType(new IntType(), new IntType()), new IntType()), "+"));
+        //         productions.add(new Production<>(new FunctionType(new PairType(new IntType(), new IntType()), new IntType()), "-"));
+        //         productions.add(new Production<>(new FunctionType(new PairType(new IntType(), new IntType()), new IntType()), "*"));
 
-                productions.add(new Production<>(new FunctionType(new PairType(new IntType(), new IntType()), new IntType()), "MIN"));
-                productions.add(new Production<>(new FunctionType(new PairType(new IntType(), new IntType()), new IntType()), "MAX"));
-            }
-        }
+        //         productions.add(new Production<>(new FunctionType(new PairType(new IntType(), new IntType()), new IntType()), "MIN"));
+        //         productions.add(new Production<>(new FunctionType(new PairType(new IntType(), new IntType()), new IntType()), "MAX"));
+        //     }
+        // }
 
-        /* Handle inputs */
-        for (InputType input : inputTypes) {
-            boolean flag1 = (symbol instanceof IntType) && (input.getType() instanceof IntType);
-            boolean flag2 = (symbol instanceof ListType) && (input.getType() instanceof ListType);
-            if (flag1 || flag2) {
-                productions.add(new Production<>(symbol, "input" + input.getIndex()));
-            }
-        }
+        // /* Handle inputs */
+        // for (InputType input : inputTypes) {
+        //     boolean flag1 = (symbol instanceof IntType) && (input.getType() instanceof IntType);
+        //     boolean flag2 = (symbol instanceof ListType) && (input.getType() instanceof ListType);
+        //     if (flag1 || flag2) {
+        //         productions.add(new Production<>(symbol, "input" + input.getIndex()));
+        //     }
+        // }
         return productions;
     }
 
@@ -314,9 +322,35 @@ public class DeepCoderGrammar implements Grammar<AbstractType> {
                 types.add(new ListType(innerType));
             }
         }
+        else if (type instanceof FunctionType) {
+            List<List<AbstractType>> inputTypes = new ArrayList<>();
+            for (AbstractType inputType : ((FunctionType) type).inputTypes) {
+                inputTypes.add(getAllTypes(inputType));
+            }
+            List<List<AbstractType>> result = new ArrayList<>();
+            generatePermutation(inputTypes, 0, new ArrayList<>(), result);
+            List<AbstractType> outputTypes = getAllTypes(((FunctionType) type).outputType);
+            for (List<AbstractType> inputType : result) {
+                for (AbstractType outputType : outputTypes) {
+                    types.add(new FunctionType(inputType, outputType));
+                }
+            }
+        }
         else {
             types.add(type);
         }
         return types;
+    }
+
+    private void generatePermutation(List<List<AbstractType>> types, int index, List<AbstractType> path, List<List<AbstractType>> result) {
+        if (index == types.size()) {
+            result.add(new ArrayList<>(path));
+            return;
+        }
+        for (int i = 0; i < types.get(index).size(); i++) {
+            path.add(types.get(index).get(i));
+            generatePermutation(types, index + 1, path, result);
+            path.remove(path.size() - 1);
+        }
     }
 }

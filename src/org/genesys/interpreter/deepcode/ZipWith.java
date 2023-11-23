@@ -41,7 +41,9 @@ public class ZipWith implements Unop {
                 Object elem0 = input1.get(i);
                 Object elem1 = input2.get(i);
                 Object val = binop.apply(elem0, elem1);
-                targetList.add(val);
+                if (val != null) {
+                    targetList.add(val);
+                }
 
             }
             return targetList;

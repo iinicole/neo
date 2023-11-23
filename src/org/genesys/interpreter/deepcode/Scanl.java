@@ -29,6 +29,9 @@ public class Scanl implements Unop {
             } else {
                 Object prev = targetList.get(i - 1);
                 Object val = binop.apply(prev, arg.get(i));
+                if (val == null) {
+                    return null;
+                }
                 targetList.add(val);
             }
         }

@@ -1289,6 +1289,7 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
         assert (node.equals(highTrail_.get(currentLine_).t0.children.get(currentChild_)));
         Map<String, Pair<Production, Integer>> decideMap = new HashMap<>();
         List<String> decideDomain = new ArrayList<>();
+        // System.out.println("parent node: " + highTrail_.get(currentLine_).t0 + " currentChild: " + currentChild_ + " child domain: " + node.domain);
         for (Production p : node.domain) {
             // System.out.println("parent node: " + highTrail_.get(currentLine_).t0 + " currentChild: " + currentChild_ + " p: " + p);
             int var = varNodes_.get(new Pair<Integer, Production>(node.id, p));
@@ -1322,6 +1323,7 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
             decisionNeo = p.t0;
             decisionSAT = p.t1;
             decisionComponent = p.t0.id;
+            // System.out.println("parent node: " + highTrail_.get(currentLine_).t0 + " domain: " + decideDomain + " decision: " + decision);
         }
 
         if (decisionNeo == null){

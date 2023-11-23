@@ -32,6 +32,10 @@ public class CountList implements Unop {
                 if (!(elem instanceof Integer)) {
                     return null;
                 }
+                if (op.toString().equals("l(a,b).(%!= a b)") || op.toString().equals("l(a,b).(%= a b)")) {
+                    if (rhs == 0)
+                        return null;
+                }
                 if (op.toString().equals("l(a,b).(< a b)") && (Integer)elem < rhs) {
                     cnt++;
                 } else if (op.toString().equals("l(a,b).(> a b)") && (Integer)elem > rhs) {

@@ -1,14 +1,16 @@
 package org.genesys.type;
 
+import java.util.List;
+
 /**
  * Created by yufeng on 5/31/17.
  */
 public class FunctionType implements AbstractType {
-    public final AbstractType inputType;
+    public final List<AbstractType> inputTypes;
     public final AbstractType outputType;
 
-    public FunctionType(AbstractType inputType, AbstractType outputType) {
-        this.inputType = inputType;
+    public FunctionType(List<AbstractType> inputTypes, AbstractType outputType) {
+        this.inputTypes = inputTypes;
         this.outputType = outputType;
     }
 
@@ -18,16 +20,16 @@ public class FunctionType implements AbstractType {
             return false;
         }
         FunctionType type = (FunctionType) obj;
-        return this.inputType.equals(type.inputType) && this.outputType.equals(type.outputType);
+        return this.inputTypes.equals(type.inputTypes) && this.outputType.equals(type.outputType);
     }
 
     @Override
     public int hashCode() {
-        return 5 * (5 * this.inputType.hashCode() + this.outputType.hashCode()) + 3;
+        return 5 * (5 * this.inputTypes.hashCode() + this.outputType.hashCode()) + 3;
     }
 
     @Override
     public String toString() {
-        return "(" + this.inputType.toString() + " -> " + this.outputType.toString() + ")";
+        return "(" + this.inputTypes.toString() + " -> " + this.outputType.toString() + ")";
     }
 }

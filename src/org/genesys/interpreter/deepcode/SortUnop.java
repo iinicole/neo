@@ -20,6 +20,7 @@ public class SortUnop implements Unop {
         }
         assert obj instanceof List : obj;
         if (((List)obj).isEmpty()) return null;
+        if (((List)obj).get(0) instanceof List) return null;
         List list = LibUtils.cast(obj);
         // Make a deep copy
         List sorted = new ArrayList<>();
