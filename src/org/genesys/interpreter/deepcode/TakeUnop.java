@@ -18,18 +18,19 @@ public class TakeUnop implements Unop {
         assert obj != null;
         List pair = (List) obj;
         if (!(pair.get(0) instanceof List) || !(pair.get(1) instanceof Integer))
-            return 256;
+            return null;
         assert pair.size() == 2 : pair;
         assert pair.get(0) instanceof List;
         assert pair.get(1) instanceof Integer;
         List input1 = (List) pair.get(0);
         int input2 = (Integer) pair.get(1);
         if (input2 < 0) {
-            return 256;
+            return null;
         } else if (input2 >= input1.size()) {
-            return 256;
+            return null;
         } else {
-            return input1.subList(0, input2);
+            List res = input1.subList(0, input2);
+            return res.size() == 0 ? null : res;
         }
     }
 

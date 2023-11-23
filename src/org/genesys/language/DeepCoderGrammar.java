@@ -188,8 +188,8 @@ public class DeepCoderGrammar implements Grammar<AbstractType> {
         // productions.add(new Production<>(true, true,id++,new ListType(new IntType()), "SCANL-MIN", new ListType(new IntType())));
         // productions.add(new Production<>(true, true,id++,new ListType(new IntType()), "SCANL-MAX", new ListType(new IntType())));
 
-        productions.add(new Production<>(false, true,id++,new ListType(new IntType()), "TAKE", new ListType(new IntType()), new IntType()));
-        productions.add(new Production<>(false, true,id++,new ListType(new IntType()), "DROP", new ListType(new IntType()), new IntType()));
+        productions.add(new Production<>(true, true,id++,new ListType(new IntType()), "TAKE", new ListType(new IntType()), new IntType()));
+        productions.add(new Production<>(true, true,id++,new ListType(new IntType()), "DROP", new ListType(new IntType()), new IntType()));
 
         //FunctionType
         productions.add(new Production<>(new BinopBoolType(), "l(a,b).(> a b)"));

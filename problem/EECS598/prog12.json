@@ -1,5 +1,5 @@
 {
-  "name": "prog9",
+  "name": "prog12",
   "program": "(SCANL input0 +)",
   "examples": [
     {

@@ -84,7 +84,12 @@ public class DeepCoderInterpreter extends BaseInterpreter {
             }
             return new Maybe<>(new HeadUnop().apply(objects.get(0)));
         });
-        executors.put("DROP", (objects, input) -> new Maybe<>(new DropUnop().apply(objects)));
+        executors.put("DROP", (objects, input) -> {
+            if (objects.size() == 0) {
+                return new Maybe<>(new DropUnop());
+            }
+            return new Maybe<>(new DropUnop().apply(objects));
+        });
         executors.put("ACCESS", (objects, input) -> {
             if (objects.size() == 0) {
                 return new Maybe<>(new AccessUnop());
@@ -281,6 +286,9 @@ public class DeepCoderInterpreter extends BaseInterpreter {
 
 
         executors.put("TAKE", (objects, input) -> {
+            if (objects.size() == 0) {
+                return new Maybe<>(new TakeUnop());
+            }
             assert objects.size() == 2 : objects;
             List args = new ArrayList();
             args.add(objects.get(0));
