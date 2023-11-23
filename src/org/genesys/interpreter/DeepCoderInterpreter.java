@@ -111,23 +111,23 @@ public class DeepCoderInterpreter extends BaseInterpreter {
         });
 
         executors.put("MAP-UNARY", (objects, input) -> {
-            if (objects.size() != 2 || !(objects.get(0) instanceof Unop) || !(objects.get(1) instanceof List)) {
+            if (objects.size() != 2 || !(objects.get(0) instanceof List) || !(objects.get(1) instanceof Unop)) {
                 return new Maybe<>(null);
             }
-            return new Maybe<>(new MapLList((Unop) objects.get(0)).apply(objects.get(1)));
+            return new Maybe<>(new MapLList((Unop) objects.get(1)).apply(objects.get(0)));
         }
         );
 
         executors.put("MAP-BINARY", (objects, input) -> {
-            if (objects.size() != 3 || !(objects.get(1) instanceof Integer) || !(objects.get(2) instanceof List)) {
+            if (objects.size() != 3 || !(objects.get(0) instanceof Integer) || !(objects.get(1) instanceof List)) {
                 return new Maybe<>(null);
             }
 
-            if (objects.get(0) instanceof Binop) {
-                return new Maybe<>(new MapLList(new HigherUnop((Binop) objects.get(0), (Integer) objects.get(1))).apply(objects.get(2)));
+            if (objects.get(2) instanceof Binop) {
+                return new Maybe<>(new MapLList(new HigherUnop((Binop) objects.get(2), (Integer) objects.get(0))).apply(objects.get(1)));
             }
-            else if (objects.get(0) instanceof Unop) {
-                return new Maybe<>(new MapLList(new HigherUnop((Unop) objects.get(0), (Integer) objects.get(1))).apply(objects.get(2)));
+            else if (objects.get(2) instanceof Unop) {
+                return new Maybe<>(new MapLList(new HigherUnop((Unop) objects.get(2), (Integer) objects.get(0))).apply(objects.get(1)));
             }
             return new Maybe<>(null);
         }

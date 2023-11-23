@@ -163,10 +163,8 @@ public class DeepCoderGrammar implements Grammar<AbstractType> {
         // productions.add(new Production<>(true, true,id++,new ListType(new IntType()), "MAP-POW", new ListType(new IntType()), new ConstPosType()));
 
         // added new productions
-        // productions.add(new Production<>(false, true,id++,new ListType(new TemplateType()), "MAP-UNARY", new UnopType(), new ListType(new ListType(new TemplateType()))));
-        productions.add(new Production<>(false, true,id++,new ListType(new TemplateType()), "MAP-UNARY", new FunctionType(new ArrayList<>(List.of(new ListType(new TemplateType()))), new TemplateType()), new ListType(new ListType(new TemplateType()))));
-        // productions.add(new Production<>(false, true,id++,new ListType(new IntType()), "MAP-BINARY", new BinopIntType(), new IntType(), new ListType(new IntType())));
-        productions.add(new Production<>(false, true,id++,new ListType(new TemplateType()), "MAP-BINARY", new FunctionType(new ArrayList<>(List.of(new TemplateType(), new IntType())), new TemplateType()), new IntType(), new ListType(new TemplateType())));
+        productions.add(new Production<>(false, true,id++,new ListType(new TemplateType()), "MAP-UNARY", new ListType(new ListType(new TemplateType())), new FunctionType(new ArrayList<>(List.of(new ListType(new TemplateType()))), new TemplateType())));
+        productions.add(new Production<>(false, true,id++,new ListType(new TemplateType()), "MAP-BINARY", new IntType(), new ListType(new TemplateType()), new FunctionType(new ArrayList<>(List.of(new TemplateType(), new IntType())), new TemplateType())));
         productions.add(new Production<>(true, true,id++,new ListType(new ListType(new TemplateType())), "GROUP", new ListType(new TemplateType())));
 
         productions.add(new Production<>(false, true,id++,new ListType(new IntType()), "FILTER", new ListType(new IntType()), new BinopBoolType(), new IntType()));
