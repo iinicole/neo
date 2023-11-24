@@ -832,7 +832,7 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
         /* Domain specific constraints for DeepCoder */
 
         String[] amo = {"ACCESS", "MAXIMUM", "COUNT", "MINIMUM", "SUM", "HEAD", "LAST", "FILTER", "SORT", "REVERSE", "TAKE", "DROP", "GROUP"};
-        String[] map = {"MAP-MUL","MAP-DIV","MAP-PLUS","MAP-POW", "MAP-UNARY", "MAP-BINARY"};
+        String[] map = {"MAP-UNARY", "MAP-BINARY"};
         String[] zipwith = {"ZIPWITH-PLUS","ZIPWITH-MINUS","ZIPWITH-MUL","ZIPWITH-MIN","ZIPWITH-MAX", "ZIPWITH"};
         String[] scanl = {"SCANL1-PLUS","SCANL1-MINUS","SCANL1-MUL","SCANL1-MIN","SCANL1-MAX", "SCANL"};
 
@@ -869,13 +869,13 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
                 }
             }
         }
-        if (map_clause.size() > 2){
-            conflict = satUtils_.addAMK(map_clause, 2);
+        if (map_clause.size() > 3){
+            conflict = satUtils_.addAMK(map_clause, 3);
             assert (!conflict);
         }
 
         VecInt zipwith_clause = new VecInt();
-        for (String s : map){
+        for (String s : zipwith){
             if (prodName_.containsKey(s)) {
                 for (int i = 0; i < highTrail_.size(); i++) {
                     Production p = prodName_.get(s);
@@ -894,7 +894,7 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
         }
 
         VecInt scanl1_clause = new VecInt();
-        for (String s : map){
+        for (String s : scanl){
             if (prodName_.containsKey(s)) {
                 for (int i = 0; i < highTrail_.size(); i++) {
                     Production p = prodName_.get(s);

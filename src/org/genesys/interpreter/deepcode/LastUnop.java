@@ -13,7 +13,7 @@ import java.util.Optional;
 public class LastUnop implements Unop {
 
     public Object apply(Object obj) {
-        if (obj instanceof  Integer){
+        if (!(obj instanceof  List)){
             // assert ((Integer)obj == 256);
             return null;
         }
