@@ -149,7 +149,7 @@ public class DeepCoderGrammar implements Grammar<AbstractType> {
         // productions.add(new Production<>(new ConstPosType(),"3"));
 
         productions.add(new Production<>(true, true, id++, new IntType(), "MAXIMUM", new ListType(new IntType())));
-        productions.add(new Production<>(false, true,id++,new IntType(), "COUNT", new ListType(new IntType()), new BinopBoolType(),new IntType()));
+        productions.add(new Production<>(false, true,id++,new IntType(), "COUNT", new ListType(new IntType()), new FunctionType(new ArrayList<>(List.of(new IntType(), new IntType())), new BoolType()),new IntType()));
         productions.add(new Production<>(true, true, id++, new IntType(), "MINIMUM", new ListType(new IntType())));
         productions.add(new Production<>(true, true, id++,new IntType(), "SUM", new ListType(new IntType())));
         productions.add(new Production<>(true, true,id++,new TemplateType(), "HEAD", new ListType(new TemplateType())));
@@ -163,11 +163,12 @@ public class DeepCoderGrammar implements Grammar<AbstractType> {
         // productions.add(new Production<>(true, true,id++,new ListType(new IntType()), "MAP-POW", new ListType(new IntType()), new ConstPosType()));
 
         // added new productions
+        // productions.add(new Production<>(false, true,id++,new ListType(new TemplateType()), "MAP-TEST", new ListType(new TemplateType()), new FunctionVariableType(new ArrayList<>(List.of(List.of(new ListType(new TemplateType()), new TemplateType()), List.of(new ListType(new TemplateType()), new IntType(), new TemplateType()))))));
         productions.add(new Production<>(false, true,id++,new ListType(new TemplateType()), "MAP-UNARY", new ListType(new ListType(new TemplateType())), new FunctionType(new ArrayList<>(List.of(new ListType(new TemplateType()))), new TemplateType())));
         productions.add(new Production<>(false, true,id++,new ListType(new TemplateType()), "MAP-BINARY", new ListType(new TemplateType()), new IntType(), new FunctionType(new ArrayList<>(List.of(new TemplateType(), new IntType())), new TemplateType())));
         productions.add(new Production<>(true, true,id++,new ListType(new ListType(new TemplateType())), "GROUP", new ListType(new TemplateType())));
 
-        productions.add(new Production<>(false, true,id++,new ListType(new IntType()), "FILTER", new ListType(new IntType()), new BinopBoolType(), new IntType()));
+        productions.add(new Production<>(false, true,id++,new ListType(new IntType()), "FILTER", new ListType(new IntType()), new FunctionType(new ArrayList<>(List.of(new IntType(), new IntType())), new BoolType()), new IntType()));
 
         productions.add(new Production<>(false, true,id++,new ListType(new IntType()), "ZIPWITH", new ListType(new IntType()), new ListType(new IntType()), new FunctionType(new ArrayList<>(List.of(new IntType(), new IntType())), new TemplateType())));
         // productions.add(new Production<>(false, true,id++,new ListType(new IntType()), "ZIPWITH-PLUS", new ListType(new IntType()), new ListType(new IntType())));
@@ -190,12 +191,12 @@ public class DeepCoderGrammar implements Grammar<AbstractType> {
         productions.add(new Production<>(true, true,id++,new ListType(new IntType()), "DROP", new ListType(new IntType()), new IntType()));
 
         //FunctionType
-        productions.add(new Production<>(new BinopBoolType(), "l(a,b).(> a b)"));
-        productions.add(new Production<>(new BinopBoolType(), "l(a,b).(< a b)"));
-        productions.add(new Production<>(new BinopBoolType(), "l(a,b).(== a b)"));
-        productions.add(new Production<>(new BinopBoolType(), "l(a,b).(!= a b)"));
-        productions.add(new Production<>(new BinopBoolType(), "l(a,b).(%!= a b)"));
-        productions.add(new Production<>(new BinopBoolType(), "l(a,b).(%= a b)"));
+        productions.add(new Production<>(new FunctionType(new ArrayList<>(List.of(new IntType(), new IntType())), new BoolType()), "l(a,b).(> a b)"));
+        productions.add(new Production<>(new FunctionType(new ArrayList<>(List.of(new IntType(), new IntType())), new BoolType()), "l(a,b).(< a b)"));
+        productions.add(new Production<>(new FunctionType(new ArrayList<>(List.of(new IntType(), new IntType())), new BoolType()), "l(a,b).(== a b)"));
+        productions.add(new Production<>(new FunctionType(new ArrayList<>(List.of(new IntType(), new IntType())), new BoolType()), "l(a,b).(!= a b)"));
+        productions.add(new Production<>(new FunctionType(new ArrayList<>(List.of(new IntType(), new IntType())), new BoolType()), "l(a,b).(%!= a b)"));
+        productions.add(new Production<>(new FunctionType(new ArrayList<>(List.of(new IntType(), new IntType())), new BoolType()), "l(a,b).(%= a b)"));
 
         // plus mul div pow
         // productions.add(new Production<>(new BinopIntType(), "+"));
@@ -225,6 +226,14 @@ public class DeepCoderGrammar implements Grammar<AbstractType> {
                     inputTypes.add(inputType);
                 }
                 secondary_productions.add(new Production<>(new FunctionType(inputTypes, production.source), production.function + "_FUNCTION"));
+                // ArrayList<AbstractType> types = new ArrayList<>(inputTypes);
+                // types.add(production.source);
+                // if (inputTypes.size() == 1) {
+                //     secondary_productions.add(new Production<>(new FunctionVariableType(new ArrayList<>(List.of(types))), production.function + "_FUNCTION_2"));
+                // }
+                // else {
+                //     secondary_productions.add(new Production<>(new FunctionVariableType(new ArrayList<>(List.of(types))), production.function + "_FUNCTION_2", inputTypes.subList(1, inputTypes.size()).toArray(new AbstractType[0])));
+                // }
             }
         }
         productions.addAll(secondary_productions);
@@ -338,6 +347,24 @@ public class DeepCoderGrammar implements Grammar<AbstractType> {
                 }
             }
         }
+        // else if (type instanceof FunctionVariableType) {
+        //     for (List<AbstractType> typesList : ((FunctionVariableType) type).types) {
+        //         List<List<AbstractType>> inputTypes = new ArrayList<>();
+        //         for (AbstractType inputType : typesList.subList(0, typesList.size() - 1)) {
+        //             inputTypes.add(getAllTypes(inputType));
+        //         }
+        //         List<List<AbstractType>> result = new ArrayList<>();
+        //         generatePermutation(inputTypes, 0, new ArrayList<>(), result);
+        //         List<AbstractType> outputTypes = getAllTypes(typesList.get(typesList.size() - 1));
+        //         for (List<AbstractType> inputType : result) {
+        //             for (AbstractType outputType : outputTypes) {
+        //                 ArrayList<AbstractType> typeList = new ArrayList<>(inputType);
+        //                 typeList.add(outputType);
+        //                 types.add(new FunctionVariableType(new ArrayList<>(List.of(typeList))));
+        //             }
+        //         }
+        //     }
+        // }
         else {
             types.add(type);
         }

@@ -86,6 +86,7 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
     private final List<Production> domainFirst_ = new ArrayList<>();
     private final List<Production> domainOutput_ = new ArrayList<>();
     private final List<Production> domainInput_ = new ArrayList<>();
+    private final List<Production> domainChild_ = new ArrayList<>();
 
     private final HashMap<Pair<Integer,Integer>,Integer> map2ktree_ = new HashMap<>();
     private final HashMap<Integer,Integer> mapold2new_ = new HashMap<>();
@@ -688,6 +689,12 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
             child.id = nodeId_++;
             nodes_.add(child);
             node.addChild(child);
+            for (int j = 0; j < maxChildren_; j++) {
+                Node child_child = new Node("", new ArrayList<>(), domainChild_);
+                child_child.id = nodeId_++;
+                nodes_.add(child_child);
+                child.addChild(child_child);
+            }
         }
         return node;
     }
@@ -702,8 +709,9 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
 
             List<Production> domain = new ArrayList<>();
             domain.addAll(domainFirst_);
-            for (int j = i-1; j >= 0; j--)
+            for (int j = i-1; j >= 0; j--) {
                 domain.addAll(lineProductions_.get(j));
+            }   
 
             if (i == 0) node = createNode(domainInput_,domain);
             else if (i == maxLen_-1) node = createNode(domainOutput_,domain);
@@ -791,6 +799,7 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
                             continue;
                         }
                         for (Production pc : prodTypes_.get(t.toString())) {
+                            // System.out.println("node.id: " + node.id + " node.children = " + node.children + " i = " + i + "p = " + p);
                             if (node.children.get(i).domain.contains(pc)) {
                                 Pair<Integer, Production> pair = new Pair<Integer, Production>(node.children.get(i).id, pc);
                                 assert (varNodes_.containsKey(pair));
@@ -1132,8 +1141,10 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
             if (prod.inputs.length > maxChildren_)
                 maxChildren_ = prod.inputs.length;
 
-            if (prod.function.startsWith("line")) 
+            if (prod.function.startsWith("line")) {
+                domainChild_.add(prod);
                 continue;
+            }
 
             domainProductions_.add(prod);
 
@@ -1151,6 +1162,10 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
 
             } else {
                 domainFirst_.add(prod);
+            }
+
+            if (prod.inputs.length == 0) {
+                domainChild_.add(prod);
             }
 
         }
@@ -1271,6 +1286,7 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
                 trail_.get(level_).add(new Pair<Node, Integer>(node.children.get(i), level_));
             }
             level_++;
+            // System.out.println("decideInputs: " + level_);
 
 //            long e = LibUtils.tick();
 //            decideTime_ += LibUtils.computeTime(s,e);
@@ -1354,6 +1370,8 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
             currentSATLevel_.add(satUtils_.getSolver().decisionLevel());
 
             for (int i = 0; i < decisionNeo.inputs.length; i++) {
+                // System.out.println("highTrail: " + highTrail_ + " currentLine: " + currentLine_ + " currentChild: " + currentChild_ + " node: " + node);
+                // System.out.println("trail: " + trail_ + "level: " + level_);
                 trail_.get(level_).add(new Pair<Node, Integer>(node.children.get(i), level_));
             }
             level_++;
