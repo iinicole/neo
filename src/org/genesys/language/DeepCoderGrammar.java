@@ -149,7 +149,7 @@ public class DeepCoderGrammar implements Grammar<AbstractType> {
         // productions.add(new Production<>(new ConstPosType(),"3"));
 
         productions.add(new Production<>(true, true, id++, new IntType(), "MAXIMUM", new ListType(new IntType())));
-        productions.add(new Production<>(false, true,id++,new IntType(), "COUNT", new ListType(new IntType()), new BinopBoolType(),new ConstNotZeroType()));
+        productions.add(new Production<>(false, true,id++,new IntType(), "COUNT", new ListType(new IntType()), new BinopBoolType(),new IntType()));
         productions.add(new Production<>(true, true, id++, new IntType(), "MINIMUM", new ListType(new IntType())));
         productions.add(new Production<>(true, true, id++,new IntType(), "SUM", new ListType(new IntType())));
         productions.add(new Production<>(true, true,id++,new TemplateType(), "HEAD", new ListType(new TemplateType())));
@@ -164,7 +164,7 @@ public class DeepCoderGrammar implements Grammar<AbstractType> {
 
         // added new productions
         productions.add(new Production<>(false, true,id++,new ListType(new TemplateType()), "MAP-UNARY", new ListType(new ListType(new TemplateType())), new FunctionType(new ArrayList<>(List.of(new ListType(new TemplateType()))), new TemplateType())));
-        productions.add(new Production<>(false, true,id++,new ListType(new TemplateType()), "MAP-BINARY", new IntType(), new ListType(new TemplateType()), new FunctionType(new ArrayList<>(List.of(new TemplateType(), new IntType())), new TemplateType())));
+        productions.add(new Production<>(false, true,id++,new ListType(new TemplateType()), "MAP-BINARY", new ListType(new TemplateType()), new IntType(), new FunctionType(new ArrayList<>(List.of(new TemplateType(), new IntType())), new TemplateType())));
         productions.add(new Production<>(true, true,id++,new ListType(new ListType(new TemplateType())), "GROUP", new ListType(new TemplateType())));
 
         productions.add(new Production<>(false, true,id++,new ListType(new IntType()), "FILTER", new ListType(new IntType()), new BinopBoolType(), new IntType()));

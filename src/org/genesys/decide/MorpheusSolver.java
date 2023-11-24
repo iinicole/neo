@@ -730,6 +730,7 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
         currentLine_ = 0;
         currentSATLevel_.add(0);
 
+        // System.out.println("ProdTypes: " + prodTypes_);
         // // iterate thru the trail
         // for (int i = 0; i < highTrail_.size(); i++){
         //     // print out node id and domain
@@ -1375,6 +1376,7 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
         Node node = highTrail_.get(level_).t0;
         Map<String, Pair<Production, Integer>> decideMap = new HashMap<>();
         List<String> decideDomain = new ArrayList<>();
+        // System.out.println("highTrail: " + highTrail_ + "node.domain: " + node.domain);
         for (Production p : node.domain) {
             int var = varNodes_.get(new Pair<Integer, Production>(node.id, p));
 
@@ -1385,7 +1387,7 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
                 decideDomain.add(p.function);
             }
         }
-
+        // System.out.println("level: " + level_ + " highTrail: " + highTrail_ + "decideDomain: " + decideDomain);
         if (false) {
             System.out.println("node: " + node);
             System.out.println("DecideMap: " + decideMap);
@@ -2338,6 +2340,7 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
                     } else {
 
                         Pair<Node,Node> ast = translate(currentLine_);
+                        // System.out.println("translate ast: " + ast + "highTrail: " + highTrail_);
                         step_ = 4; // Line is complete
 
                         if (cacheAST_.containsKey(ast.t0.toString())) {

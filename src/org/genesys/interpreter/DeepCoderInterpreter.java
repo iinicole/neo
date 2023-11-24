@@ -119,15 +119,15 @@ public class DeepCoderInterpreter extends BaseInterpreter {
         );
 
         executors.put("MAP-BINARY", (objects, input) -> {
-            if (objects.size() != 3 || !(objects.get(0) instanceof Integer) || !(objects.get(1) instanceof List)) {
+            if (objects.size() != 3 || !(objects.get(0) instanceof List) || !(objects.get(1) instanceof Integer)) {
                 return new Maybe<>(null);
             }
 
             if (objects.get(2) instanceof Binop) {
-                return new Maybe<>(new MapLList(new HigherUnop((Binop) objects.get(2), (Integer) objects.get(0))).apply(objects.get(1)));
+                return new Maybe<>(new MapLList(new HigherUnop((Binop) objects.get(2), (Integer) objects.get(1))).apply(objects.get(0)));
             }
             else if (objects.get(2) instanceof Unop) {
-                return new Maybe<>(new MapLList(new HigherUnop((Unop) objects.get(2), (Integer) objects.get(0))).apply(objects.get(1)));
+                return new Maybe<>(new MapLList(new HigherUnop((Unop) objects.get(2), (Integer) objects.get(1))).apply(objects.get(0)));
             }
             return new Maybe<>(null);
         }
@@ -174,10 +174,7 @@ public class DeepCoderInterpreter extends BaseInterpreter {
         );
 
         executors.put("COUNT", (objects, input) -> {
-                    if (!(objects.get(2) instanceof Integer)) {
-                        return new Maybe<>(null);
-                    }
-                    if (!(objects.get(1) instanceof Binop)) {
+                    if (objects.size() != 3 || !(objects.get(0) instanceof List) || !(objects.get(1) instanceof Binop) || !(objects.get(2) instanceof Integer)) {
                         return new Maybe<>(null);
                     }
                     return new Maybe<>(new CountList((Binop) objects.get(1),(Integer)objects.get(2)).apply(objects.get(0)));
