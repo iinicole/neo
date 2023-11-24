@@ -76,7 +76,7 @@ public class MorpheusSynthesizer implements Synthesizer {
 
     public MorpheusSynthesizer(Grammar grammar, Problem problem, Checker checker, Interpreter interpreter, int depth, String specLoc, boolean learning, Decider decider) {
         learning_ = learning;
-        System.out.println("GRAMMAR" + grammar.getProductions());
+        System.out.println("GRAMMAR:" + grammar.getProductions());
         solver_ = new MorpheusSolver(grammar, depth, decider, learning);
         checker_ = checker;
         interpreter_ = interpreter;
@@ -113,6 +113,7 @@ public class MorpheusSynthesizer implements Synthesizer {
         int partial = 0;
         Set<String> coreCache_ = new HashSet<>();
         //Set<String> coreAst_ = new HashSet<>();
+        boolean foundProgram = false;
 
         while (ast != null) {
             // System.out.println("THIS IS AST: " + ast);
@@ -203,6 +204,7 @@ public class MorpheusSynthesizer implements Synthesizer {
 
                 if (isCorrect) {
                     System.out.println("Synthesized PROGRAM: " + ast);
+                    foundProgram = true;
                     break;
                 } else {
                     long start3 = LibUtils.tick();
@@ -230,7 +232,9 @@ public class MorpheusSynthesizer implements Synthesizer {
         System.out.println("SMT:" + smt1);
         System.out.println("Type:" + typeinhabit);
 
-        return ast;
+        if (foundProgram)
+            return ast;
+        throw new RuntimeException("Not Found");
     }
 
     /* Verify the program using I-O examples. */
