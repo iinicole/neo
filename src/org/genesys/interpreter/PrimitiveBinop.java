@@ -17,6 +17,7 @@ public class PrimitiveBinop implements Binop {
         if (this.op.equals("+")) {
             return (int) first + (int) second;
         } else if (this.op.equals("^")) {
+            if ((int) second < 0) return null;
             int res = (int)first;
             for (int i = 1; i <= (int)second; i++){
                 res *= (int)first;

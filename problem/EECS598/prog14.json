@@ -1,6 +1,6 @@
 {
   "name": "prog14",
-  "program": "(MAP TAKE 3 (MAP ACCESS input0 1))",
+  "program": "(MAP TAKE 2 (MAP ACCESS input0 1))",
   "examples": [
     {
       "input": [

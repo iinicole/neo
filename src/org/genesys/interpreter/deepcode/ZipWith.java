@@ -25,6 +25,9 @@ public class ZipWith implements Unop {
         assert obj != null;
         List<List> pair = (List<List>) obj;
         assert pair.size() == 2 : pair;
+        if (!(pair.get(0) instanceof List) || !(pair.get(1) instanceof List)) {
+            return null;
+        }
         List input1 = pair.get(0);
         List input2 = pair.get(1);
         List targetList = new ArrayList();
