@@ -25,14 +25,14 @@ def run_test(folder_name, file_name, depth=3):
     
     # subprocess run
     try:
-        print(f'Running {base_cmd}')
+        print(f'Running {base_cmd}', end='\t')
         res = subprocess.run(base_cmd, shell=True, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        print(f'Success running {file_path}')
+        print(f'Success')
         with open(outputFile, 'w') as f:
             f.write(res.stdout.decode('utf-8'))
             f.write(res.stderr.decode('utf-8'))
     except subprocess.CalledProcessError as e:
-        print(f'Error running {file_path}')
+        print(f'Error')
         with open(outputFile, 'w') as f:
             f.write(e.stdout.decode('utf-8'))
         
