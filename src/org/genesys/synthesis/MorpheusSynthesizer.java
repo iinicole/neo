@@ -130,8 +130,8 @@ public class MorpheusSynthesizer implements Synthesizer {
             if (solver_.isPartial())
                 isSatisfiable = checker_.check(problem_, ast, curr);
             else {
-                if (checker_ instanceof MorpheusChecker)
-                    isSatisfiable = checker_.check(problem_, ast, curr);
+                // if (checker_ instanceof MorpheusChecker)
+                //     isSatisfiable = checker_.check(problem_, ast, curr);
             }
             long end = LibUtils.tick();
             totalDeduction += LibUtils.computeTime(start, end);
