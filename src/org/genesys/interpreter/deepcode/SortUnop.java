@@ -33,4 +33,9 @@ public class SortUnop implements Unop {
     public String toString() {
         return "SORT";
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof SortUnop;
+    }
 }

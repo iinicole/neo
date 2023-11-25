@@ -66,4 +66,9 @@ public class FilterLList implements Unop {
     public String toString() {
         return "FILTER";
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof FilterLList && this.op.equals(((FilterLList) obj).op) && this.rhs.equals(((FilterLList) obj).rhs);
+    }
 }

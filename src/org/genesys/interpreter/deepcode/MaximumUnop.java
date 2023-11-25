@@ -29,4 +29,9 @@ public class MaximumUnop implements Unop {
     public String toString() {
         return "MAXIMUM";
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof MaximumUnop;
+    }
 }

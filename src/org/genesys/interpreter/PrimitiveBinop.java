@@ -70,4 +70,13 @@ public class PrimitiveBinop implements Binop {
     public String toString() {
         return "l(a,b).(" + this.op + " a b)";
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof PrimitiveBinop)) {
+            return false;
+        }
+        PrimitiveBinop binop = (PrimitiveBinop) obj;
+        return this.op.equals(binop.op);
+    }
 }

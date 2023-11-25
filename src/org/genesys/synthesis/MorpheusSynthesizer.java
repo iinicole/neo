@@ -204,6 +204,9 @@ public class MorpheusSynthesizer implements Synthesizer {
 
                 if (isCorrect) {
                     System.out.println("Synthesized PROGRAM: " + ast);
+                    DeepCoderSimplifier simplifier = new DeepCoderSimplifier(interpreter_, problem_.getExamples());
+                    Node simplified = simplifier.simplify(ast);
+                    System.out.println("Simplified PROGRAM: " + ast);
                     foundProgram = true;
                     break;
                 } else {

@@ -33,4 +33,12 @@ public class NumUnop implements Unop {
     public String toString() {
         return "NumUnop_" + binop + val;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof NumUnop))
+            return false;
+        NumUnop other = (NumUnop) obj;
+        return binop.equals(other.binop) && val.equals(other.val);
+    }
 }

@@ -28,4 +28,9 @@ public class SumUnop implements Unop {
     public String toString() {
         return "SUM";
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof SumUnop;
+    }
 }

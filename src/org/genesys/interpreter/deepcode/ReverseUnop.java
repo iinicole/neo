@@ -30,4 +30,9 @@ public class ReverseUnop implements Unop {
     public String toString() {
         return "REVERSE";
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof ReverseUnop;
+    }
 }

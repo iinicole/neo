@@ -34,4 +34,9 @@ public class DropUnop implements Unop {
     public String toString() {
         return "DROP";
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof DropUnop;
+    }
 }

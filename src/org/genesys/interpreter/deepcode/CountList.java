@@ -57,4 +57,9 @@ public class CountList implements Unop {
     public String toString() {
         return "COUNT";
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof CountList && this.op.equals(((CountList) obj).op) && this.rhs == ((CountList) obj).rhs;
+    }
 }

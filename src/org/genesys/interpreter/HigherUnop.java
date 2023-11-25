@@ -38,4 +38,9 @@ public class HigherUnop implements Unop {
         }
         return this.unop.toString();
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof HigherUnop && this.binop.equals(((HigherUnop) obj).binop) && this.unop.equals(((HigherUnop) obj).unop) && this.val.equals(((HigherUnop) obj).val);
+    }
 }

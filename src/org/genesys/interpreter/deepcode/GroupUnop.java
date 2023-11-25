@@ -40,4 +40,9 @@ public class GroupUnop implements Unop {
     public String toString() {
         return "GROUP";
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof GroupUnop;
+    }
 }

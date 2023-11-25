@@ -21,4 +21,9 @@ public class PrimitiveUnop implements Unop {
     public String toString() {
         return "l(a).(" + this.op + " (" + this.val.toString() + ") b)";
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof PrimitiveUnop && this.op.equals(((PrimitiveUnop) obj).op) && this.val.equals(((PrimitiveUnop) obj).val);
+    }
 }

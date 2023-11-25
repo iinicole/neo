@@ -26,4 +26,9 @@ public class LastUnop implements Unop {
     public String toString() {
         return "LAST";
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof LastUnop;
+    }
 }

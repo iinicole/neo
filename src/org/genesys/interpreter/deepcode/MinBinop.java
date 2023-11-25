@@ -20,4 +20,9 @@ public class MinBinop implements Binop {
     public String toString() {
         return "MIN";
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof MinBinop;
+    }
 }

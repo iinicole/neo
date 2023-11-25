@@ -25,4 +25,9 @@ public class HeadUnop implements Unop {
     public String toString() {
         return "HEAD";
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof HeadUnop;
+    }
 }

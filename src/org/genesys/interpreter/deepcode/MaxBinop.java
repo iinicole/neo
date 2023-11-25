@@ -20,4 +20,9 @@ public class MaxBinop implements Binop {
     public String toString() {
         return "MAX";
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof MaxBinop;
+    }
 }

@@ -41,4 +41,9 @@ public class Scanl implements Unop {
     public String toString() {
         return "SCANL";
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof Scanl && this.binop.equals(((Scanl) obj).binop);
+    }
 }

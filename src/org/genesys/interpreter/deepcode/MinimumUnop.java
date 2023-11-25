@@ -29,4 +29,9 @@ public class MinimumUnop implements Unop {
     public String toString() {
         return "MINIMUM";
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof MinimumUnop;
+    }
 }

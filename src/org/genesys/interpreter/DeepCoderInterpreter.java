@@ -56,22 +56,21 @@ public class DeepCoderInterpreter extends BaseInterpreter {
             }
             return new Maybe<>(new MaximumUnop().apply(objects.get(0)));
         });
-        executors.put("MAXIMUM_INPUT", (objects, input) -> {
-            // System.out.println("MAXIMUM_INPUT objects: " + objects + "input: " + input); 
-            return new Maybe<>(new MaximumUnop());
-        });
+
         executors.put("MINIMUM", (objects, input) -> {
             if (objects.size() == 0) {
                 return new Maybe<>(new MinimumUnop());
             }
             return new Maybe<>(new MinimumUnop().apply(objects.get(0)));
         });
+
         executors.put("SUM", (objects, input) -> {
             if (objects.size() == 0) {
                 return new Maybe<>(new SumUnop());
             }
             return new Maybe<>(new SumUnop().apply(objects.get(0)));
         });
+        
         executors.put("LAST", (objects, input) -> {
             if (objects.size() == 0) {
                 return new Maybe<>(new LastUnop());

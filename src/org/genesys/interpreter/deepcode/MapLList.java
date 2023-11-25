@@ -43,4 +43,9 @@ public class MapLList implements Unop {
     public String toString() {
         return "MAP";
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof MapLList && this.unop.equals(((MapLList) obj).unop);
+    }
 }

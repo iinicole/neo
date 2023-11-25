@@ -55,4 +55,9 @@ public class AccessUnop implements Unop {
     public String toString() {
         return "ACCESS";
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof AccessUnop;
+    }
 }

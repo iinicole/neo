@@ -56,4 +56,9 @@ public class ZipWith implements Unop {
     public String toString() {
         return "ZIPWITH";
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof ZipWith && this.binop.equals(((ZipWith) obj).binop);
+    }
 }

@@ -37,4 +37,9 @@ public class TakeUnop implements Unop {
     public String toString() {
         return "TAKE";
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof TakeUnop;
+    }
 }
