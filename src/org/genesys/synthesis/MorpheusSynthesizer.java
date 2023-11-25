@@ -255,7 +255,8 @@ public class MorpheusSynthesizer implements Synthesizer {
                     passed = false;
                     break;
                 }
-
+                // System.out.println("target: " + tgt.get());
+                // System.out.println("output: " + output);
             //    System.out.println("result target:\n" + ((SimpleDataFrame)tgt.get()).getCols());
 //                Extensions.print((SimpleDataFrame)tgt.get());
             //    System.out.println("expected target:\n" + ((SimpleDataFrame)output).getCols());

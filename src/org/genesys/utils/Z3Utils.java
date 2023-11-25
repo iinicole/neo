@@ -438,7 +438,7 @@ public class Z3Utils {
             for (String type : types) {
                 List<String> eq_vec = new ArrayList<>();
                 for (Component comp : components) {
-                    if (!comp.getType().equals(type)) continue;
+                    if (!comp.getType().equals(type)) continue; // TODO: Nicole
                     solver_core.push();
                     for (String cst : comp.getConstraint()) {
                         BoolExpr comCst = convertStrToExpr2(cst);

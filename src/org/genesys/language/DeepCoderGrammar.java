@@ -110,7 +110,7 @@ public class DeepCoderGrammar implements Grammar<AbstractType> {
         List<Production<AbstractType>> productions = new ArrayList<>();
 
         for (InputType input : inputTypes) {
-            assert (input.getType() instanceof IntType || input.getType() instanceof ListType || input.getType() instanceof BoolType);
+            assert (input.getType() instanceof IntType || input.getType() instanceof ListType);
             productions.add(new Production<>(input.getType(), "input" + input.getIndex()));
             // if (input.getType() instanceof IntType)
             //     productions.add(new Production<>(new IntType(), "input" + input.getIndex()));
@@ -148,6 +148,7 @@ public class DeepCoderGrammar implements Grammar<AbstractType> {
         // productions.add(new Production<>(new ConstPosType(),"2"));
         // productions.add(new Production<>(new ConstPosType(),"3"));
 
+        // productions.add(new Production<>(false, true, id++, new TemplateType(), "NOOP", new TemplateType()));
         productions.add(new Production<>(true, true, id++, new IntType(), "MAXIMUM", new ListType(new IntType())));
         productions.add(new Production<>(false, true,id++,new IntType(), "COUNT", new ListType(new IntType()), new FunctionType(new ArrayList<>(List.of(new IntType(), new IntType())), new BoolType()),new IntType()));
         productions.add(new Production<>(true, true, id++, new IntType(), "MINIMUM", new ListType(new IntType())));
@@ -178,7 +179,7 @@ public class DeepCoderGrammar implements Grammar<AbstractType> {
         // productions.add(new Production<>(false, true,id++,new ListType(new IntType()), "ZIPWITH-MAX", new ListType(new IntType()), new ListType(new IntType())));
 
         productions.add(new Production<>(true, true,id++,new ListType(new IntType()), "SORT", new ListType(new IntType())));
-        productions.add(new Production<>(true, true,id++,new ListType(new IntType()), "REVERSE", new ListType(new IntType())));
+        productions.add(new Production<>(true, true,id++,new ListType(new TemplateType()), "REVERSE", new ListType(new TemplateType())));
 
         productions.add(new Production<>(false, true,id++,new ListType(new IntType()), "SCANL", new ListType(new IntType()), new FunctionType(new ArrayList<>(List.of(new IntType(), new IntType())), new TemplateType())));
         // productions.add(new Production<>(true, true,id++,new ListType(new IntType()), "SCANL-PLUS", new ListType(new IntType())));

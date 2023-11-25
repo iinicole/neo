@@ -180,10 +180,7 @@ public class DeepCoderInterpreter extends BaseInterpreter {
 //        );
 
         executors.put("FILTER", (objects, input) -> {
-                    if (!(objects.get(2) instanceof Integer)) {
-                        return new Maybe<>(null);
-                    }
-                    if (!(objects.get(1) instanceof Binop)) {
+                    if (objects.size() != 3 || !(objects.get(0) instanceof List) || !(objects.get(1) instanceof Binop) || !(objects.get(2) instanceof Integer)) {
                         return new Maybe<>(null);
                     }
                 return new Maybe<>(new FilterLList((Binop) objects.get(1),(Integer)objects.get(2)).apply(objects.get(0)));
