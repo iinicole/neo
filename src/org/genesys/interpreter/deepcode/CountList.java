@@ -33,7 +33,7 @@ public class CountList implements Unop {
                     return null;
                 }
                 if (op.toString().equals("l(a,b).(%!= a b)") || op.toString().equals("l(a,b).(%= a b)")) {
-                    if (rhs == 0)
+                    if (rhs <= 0)
                         return null;
                 }
                 if (op.toString().equals("l(a,b).(< a b)") && (Integer)elem < rhs) {

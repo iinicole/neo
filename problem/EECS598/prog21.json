@@ -1,0 +1,12 @@
+{
+  "name": "prog21",
+  "program": "(MAP (HEAD input0))",
+  "examples": [
+    {
+      "input": [
+        [1, 2, 3, 4]
+      ],
+      "output": [1, 2, 3, 4, 1, 2, 3, 4]
+    }
+  ]
+}
