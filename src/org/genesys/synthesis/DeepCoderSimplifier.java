@@ -57,6 +57,10 @@ public class DeepCoderSimplifier {
                             same_result.retainAll(child_result.get(j).get(ast_results.get(j)));
                         }
                     }
+                    else {
+                        same_result.clear();
+                        break;
+                    }
                 }
 
                 if (!same_result.isEmpty()) {
