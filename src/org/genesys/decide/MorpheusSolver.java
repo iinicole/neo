@@ -689,12 +689,12 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
             child.id = nodeId_++;
             nodes_.add(child);
             node.addChild(child);
-            for (int j = 0; j < maxChildren_; j++) {
-                Node child_child = new Node("", new ArrayList<>(), domainChild_);
-                child_child.id = nodeId_++;
-                nodes_.add(child_child);
-                child.addChild(child_child);
-            }
+            // for (int j = 0; j < maxChildren_; j++) {
+            //     Node child_child = new Node("", new ArrayList<>(), domainChild_);
+            //     child_child.id = nodeId_++;
+            //     nodes_.add(child_child);
+            //     child.addChild(child_child);
+            // }
         }
         return node;
     }
@@ -753,6 +753,9 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
     private void buildSATFormula() {
         // System.out.println("varNodes: " + varNodes_);
         // System.out.println("nameNodes_: " + nameNodes_);
+        for (Node node : nodes_) {
+            System.out.println(node + "id: " + node.id + " children size: " + node.children.size());
+        }
         boolean conflict = false;
 
         // If a production is used in a parent node then this implies restrictions on the children
