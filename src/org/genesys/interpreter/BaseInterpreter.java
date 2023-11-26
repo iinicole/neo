@@ -41,7 +41,13 @@ public class BaseInterpreter implements Interpreter<Node, Object> {
         }
 
         if (!this.executors.containsKey(node.function)) {
-            throw new UnsupportedOperationException("Invalid argument." + node.function);
+            // if it is an integer, then return it
+            try {
+                int val = Integer.parseInt(node.function);
+                return new Maybe<>(val);
+            } catch (NumberFormatException e) {
+                throw new UnsupportedOperationException("Invalid argument." + node.function);
+            }
         }
         assert arglist.size() == node.children.size();
 

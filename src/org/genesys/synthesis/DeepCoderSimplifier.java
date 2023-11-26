@@ -44,6 +44,33 @@ public class DeepCoderSimplifier {
             children_results.add(pair.t1);
         }
 
+        // special simplification for COUNT
+        // if result is always the same across all examples, then replace ast with result
+        if (ast.function.equals("COUNT")) {
+            Integer result = (Integer) ast_results.get(0);
+            boolean same = true;
+            for (int i = 1; i < ast_results.size(); i++) {
+                if (!ast_results.get(i).equals(result)) {
+                    same = false;
+                    break;
+                }
+            }
+
+            if (same) {
+                Node new_ast = new Node(result.toString(), new ArrayList<>());
+                List<HashMap<Object, Set<Node>>> list_hashmap = new ArrayList<>();
+                // add result to each one
+                for (int i = 0; i < examples_.size(); i++) {
+                    Object result_ = ast_results.get(i);
+                    HashMap<Object, Set<Node>> map_ = new HashMap<>();
+                    map_.put(result_, new HashSet<>());
+                    map_.get(result_).add(new_ast);
+                    list_hashmap.add(map_);
+                }
+                return new Pair<>(new_ast, list_hashmap);
+            }
+        }
+
         Node new_ast = ast;
         if (new_ast.function != "root") {
             for (int i = 0; i < new_ast.children.size(); i++) {
@@ -80,7 +107,7 @@ public class DeepCoderSimplifier {
         }
 
         // construct hashmap for new_ast
-        List<HashMap<Object, Set<Node>>> map = new ArrayList<>();
+        List<HashMap<Object, Set<Node>>> list_hashmap = new ArrayList<>();
         // combine all children's hashmaps
         for (int i = 0; i < examples_.size(); i++) {
             HashMap<Object, Set<Node>> child_map = new HashMap<>();
@@ -93,17 +120,17 @@ public class DeepCoderSimplifier {
                     child_map.get(key).addAll(child_result.get(key));
                 }
             }
-            map.add(child_map);
+            list_hashmap.add(child_map);
         }
         // add new_ast result to hashmap
         for (int i = 0; i < examples_.size(); i++) {
             Object result = ast_results.get(i);
-            if (!map.get(i).containsKey(result)) {
-                map.get(i).put(result, new HashSet<>());
+            if (!list_hashmap.get(i).containsKey(result)) {
+                list_hashmap.get(i).put(result, new HashSet<>());
             }
-            map.get(i).get(result).add(new_ast);
+            list_hashmap.get(i).get(result).add(new_ast);
         }
-        return new Pair<>(new_ast, map);
+        return new Pair<>(new_ast, list_hashmap);
     }
     
 
