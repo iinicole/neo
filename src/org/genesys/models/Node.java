@@ -123,4 +123,12 @@ public class Node {
         return sb.toString();
     }
 
+    public int size() {
+        int result = 1;
+        for (Node child : children) {
+            result += child.size();
+        }
+        return result;
+    }
+    
 }

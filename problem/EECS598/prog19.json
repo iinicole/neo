@@ -1,12 +1,12 @@
 {
-  "name": "prog18",
+  "name": "prog19",
   "program": "(HEAD (HEAD input0))",
   "examples": [
     {
       "input": [
-        [1, 2, 3]
+        [1, 2, 3, 4, 6, 234, 63]
       ],
-      "output": [[[1]], [[2]], [[3]]]
+      "output": [1, 2, 3, 4, 6, 234, 63]
     }
   ]
 }
