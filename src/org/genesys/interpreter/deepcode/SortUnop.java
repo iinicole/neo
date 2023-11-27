@@ -27,6 +27,7 @@ public class SortUnop implements Unop {
         for (Object i : list)
             sorted.add(i);
         Collections.sort(sorted);
+        assert sorted.size() == list.size();
         return sorted;
     }
 

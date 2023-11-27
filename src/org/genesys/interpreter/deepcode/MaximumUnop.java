@@ -21,7 +21,7 @@ public class MaximumUnop implements Unop {
         if (((List)obj).isEmpty()) return null;
         if (((List)obj).get(0) instanceof List) return null;
         List<Integer> list = LibUtils.cast(obj);
-        if (list.isEmpty()) return 256;
+        if (list.isEmpty()) return null;
         Optional<Integer> max = list.stream().reduce(Integer::max);
         return max.get();
     }

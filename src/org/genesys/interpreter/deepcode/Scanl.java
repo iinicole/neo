@@ -35,6 +35,7 @@ public class Scanl implements Unop {
                 targetList.add(val);
             }
         }
+        assert targetList.size() == arg.size();
         return targetList;
     }
 

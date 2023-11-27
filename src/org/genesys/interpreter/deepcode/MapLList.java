@@ -27,15 +27,17 @@ public class MapLList implements Unop {
         }
         List list = (List) obj;
         if (list.isEmpty()) {
-            return list;
+            return null;
         } else {
             List targetList = new ArrayList();
             for(Object elem : list) {
                 Object target = this.unop.apply(elem);
-                if (target != null) {
-                    targetList.add(target);
+                if (target == null) {
+                    return null;
                 }
+                targetList.add(target);
             }
+            assert targetList.size() == list.size();
             return targetList;
         }
     }

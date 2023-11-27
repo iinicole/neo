@@ -20,7 +20,7 @@ public class LastUnop implements Unop {
         assert obj instanceof List : obj;
         List<Object> list = LibUtils.cast(obj);
         int len = list.size();
-        return (len == 0) ? 256 : list.get(len - 1);
+        return (len == 0) ? null : list.get(len - 1);
     }
 
     public String toString() {

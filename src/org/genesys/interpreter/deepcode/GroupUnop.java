@@ -24,6 +24,9 @@ public class GroupUnop implements Unop {
         List<List<Object>> result = new ArrayList<>();
         List<Object> cur = new ArrayList<>();
         cur.add(list.get(0));
+        if (list.get(0) == null) {
+            return null;
+        }
         for (int i = 1; i < list.size(); i++) {
             if (list.get(i).equals(list.get(i - 1))) {
                 cur.add(list.get(i));
@@ -31,6 +34,9 @@ public class GroupUnop implements Unop {
                 result.add(cur);
                 cur = new ArrayList<>();
                 cur.add(list.get(i));
+                if (list.get(i) == null) {
+                    return null;
+                }
             }
         }
         result.add(cur);

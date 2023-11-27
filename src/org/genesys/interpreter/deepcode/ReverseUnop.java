@@ -24,6 +24,7 @@ public class ReverseUnop implements Unop {
         for (Object i : list)
             reverse.add(i);
         Collections.reverse(reverse);
+        assert reverse.size() == list.size();
         return reverse;
     }
 

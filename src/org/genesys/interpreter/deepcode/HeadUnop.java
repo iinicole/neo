@@ -19,7 +19,7 @@ public class HeadUnop implements Unop {
         }
         assert obj instanceof List : obj;
         List<Object> list = LibUtils.cast(obj);
-        return list.isEmpty() ? 256 : list.get(0);
+        return list.isEmpty() ? null : list.get(0);
     }
 
     public String toString() {

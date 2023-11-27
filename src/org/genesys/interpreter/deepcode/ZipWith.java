@@ -32,7 +32,7 @@ public class ZipWith implements Unop {
         List input2 = pair.get(1);
         List targetList = new ArrayList();
         if (input1.size() != input2.size())
-            return new ArrayList<>();
+            return null;
         //int min = Math.min(input1.size(), input2.size());
 //
 //        if (input1.size() != input2.size()) {
@@ -44,11 +44,13 @@ public class ZipWith implements Unop {
                 Object elem0 = input1.get(i);
                 Object elem1 = input2.get(i);
                 Object val = binop.apply(elem0, elem1);
-                if (val != null) {
-                    targetList.add(val);
+                if (val == null) {
+                    return null;
                 }
+                targetList.add(val);
 
             }
+            assert targetList.size() == input1.size();
             return targetList;
         //}
     }
