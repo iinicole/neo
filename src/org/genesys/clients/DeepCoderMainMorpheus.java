@@ -36,7 +36,8 @@ public class DeepCoderMainMorpheus {
         Problem dcProblem = gson.fromJson(new FileReader(json), Problem.class);
         System.out.println("Run DeepCoder main..." + dcProblem);
 
-        DeepCoderGrammar grammar = new DeepCoderGrammar(dcProblem);
+        int depth = Integer.valueOf(args[1]);
+        DeepCoderGrammar grammar = new DeepCoderGrammar(dcProblem, depth);
         /* Load component specs. */
         Checker checker = new DeepCoderChecker(specLoc, grammar);
         //Checker checker = new DummyChecker();
@@ -49,7 +50,6 @@ public class DeepCoderMainMorpheus {
             if(useStat)
                 decider = new DeepCoderPythonDecider(dcProblem);
 
-            int depth = Integer.valueOf(args[1]);
             boolean learning = Boolean.valueOf(args[2]);
 
             if (args.length == 5){

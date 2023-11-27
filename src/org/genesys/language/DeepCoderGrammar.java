@@ -15,7 +15,10 @@ public class DeepCoderGrammar implements Grammar<AbstractType> {
 
     private int id = 1;
 
-    private int typeDist = 5;
+    private int startDepth = Integer.MAX_VALUE;
+    private int endDepth = Integer.MIN_VALUE;
+    private int rangeStart;
+    private int rangeEnd;
 
     public AbstractType inputType;
 
@@ -29,7 +32,7 @@ public class DeepCoderGrammar implements Grammar<AbstractType> {
         this.outputType = outputType;
     }
 
-    public DeepCoderGrammar(Problem p) {
+    public DeepCoderGrammar(Problem p, int maxDepth) {
         assert !p.getExamples().isEmpty();
         Example example = p.getExamples().get(0);
         List input = example.getInput();
@@ -46,10 +49,48 @@ public class DeepCoderGrammar implements Grammar<AbstractType> {
             addInput(in);
         }
         Object output = example.getOutput();
-        this.outputType = getType(output);
-        System.out.println("inputTypes: " + this.inputTypes);
-        System.out.println("outputType: " + this.outputType);
+        outputType = getType(output);
+        System.out.println("inputTypes: " + inputTypes);
+        System.out.println("outputType: " + outputType);
+
+        // find the minimum and maximum dpeth in input and output
+        for (InputType inputType : inputTypes) {
+            if (inputType.getType() instanceof ListType) {
+                AbstractType type = inputType.getType();
+                updateStartAndEndDepth(type);
+            }
+        }
+        updateStartAndEndDepth(outputType);
+
+        // System.out.println("startDepth: " + startDepth);
+        // System.out.println("endDepth: " + endDepth);
+
+        assert (endDepth - startDepth <= maxDepth);
+        int extra = maxDepth - (endDepth - startDepth);
+        rangeStart = Math.max(0, startDepth - (extra / 2) - 1);
+        rangeEnd = endDepth + extra / 2;
+        System.out.println("rangeStart: " + rangeStart);
+        System.out.println("rangeEnd: " + rangeEnd);
     }
+
+    private int getDepth(AbstractType type) {
+        int depth = 0;
+        while (type instanceof ListType) {
+            depth++;
+            type = ((ListType) type).type;
+        }
+        return depth;
+    }
+
+    private void updateStartAndEndDepth(AbstractType type) {
+        int depth = getDepth(type);
+        if (depth < startDepth) {
+            startDepth = depth;
+        }
+        if (depth > endDepth) {
+            endDepth = depth;
+        }
+    } 
 
     private AbstractType getType(Object obj) {
         if (obj instanceof List) {
@@ -86,7 +127,8 @@ public class DeepCoderGrammar implements Grammar<AbstractType> {
         List<Production<AbstractType>> productions = new ArrayList<>();
 
         for (int i = 0; i < size; i++) {
-            for (int j = 0; j < typeDist; j++) {
+            productions.add(new Production<>(new IntType(), "line" + i + "depth0"));
+            for (int j = Math.max(1, rangeStart); j <= rangeEnd; j++) {
                 productions.add(new Production<>(creatType(j), "line" + i + "depth" + j));
             }
             // productions.add(new Production<>(new IntType(), "line" + i + "int"));
@@ -170,7 +212,7 @@ public class DeepCoderGrammar implements Grammar<AbstractType> {
 
         productions.add(new Production<>(false, true,id++,new ListType(new IntType()), "FILTER", new ListType(new IntType()), new FunctionType(new ArrayList<>(List.of(new IntType(), new IntType())), new BoolType()), new IntType()));
 
-        productions.add(new Production<>(false, true,id++,new ListType(new IntType()), "ZIPWITH", new ListType(new IntType()), new ListType(new IntType()), new FunctionType(new ArrayList<>(List.of(new IntType(), new IntType())), new TemplateType())));
+        productions.add(new Production<>(false, true,id++,new ListType(new IntType()), "ZIPWITH", new ListType(new IntType()), new ListType(new IntType()), new FunctionType(new ArrayList<>(List.of(new IntType(), new IntType())), new IntType())));
         // productions.add(new Production<>(false, true,id++,new ListType(new IntType()), "ZIPWITH-PLUS", new ListType(new IntType()), new ListType(new IntType())));
         // productions.add(new Production<>(false, true,id++,new ListType(new IntType()), "ZIPWITH-MINUS", new ListType(new IntType()), new ListType(new IntType())));
         // productions.add(new Production<>(false, true,id++,new ListType(new IntType()), "ZIPWITH-MUL", new ListType(new IntType()), new ListType(new IntType())));
@@ -180,7 +222,7 @@ public class DeepCoderGrammar implements Grammar<AbstractType> {
         productions.add(new Production<>(true, true,id++,new ListType(new IntType()), "SORT", new ListType(new IntType())));
         productions.add(new Production<>(true, true,id++,new ListType(new TemplateType()), "REVERSE", new ListType(new TemplateType())));
 
-        productions.add(new Production<>(false, true,id++,new ListType(new IntType()), "SCANL", new ListType(new IntType()), new FunctionType(new ArrayList<>(List.of(new IntType(), new IntType())), new TemplateType())));
+        productions.add(new Production<>(false, true,id++,new ListType(new IntType()), "SCANL", new ListType(new IntType()), new FunctionType(new ArrayList<>(List.of(new IntType(), new IntType())), new IntType())));
         // productions.add(new Production<>(true, true,id++,new ListType(new IntType()), "SCANL-PLUS", new ListType(new IntType())));
         // productions.add(new Production<>(true, true,id++,new ListType(new IntType()), "SCANL-MINUS", new ListType(new IntType())));
         // productions.add(new Production<>(true, true,id++,new ListType(new IntType()), "SCANL-MUL", new ListType(new IntType())));
@@ -324,7 +366,11 @@ public class DeepCoderGrammar implements Grammar<AbstractType> {
     public List<AbstractType> getAllTypes(AbstractType type) {
         List<AbstractType> types = new ArrayList<>();
         if (type instanceof TemplateType) {
-            for (int i = 0; i < typeDist; i++) {
+            // for (int i = 0; i < typeDist; i++) {
+            //     types.add(creatType(i));
+            // }
+            types.add(new IntType());
+            for (int i = Math.max(1, rangeStart); i <= rangeEnd; i++) {
                 types.add(creatType(i));
             }
         }
