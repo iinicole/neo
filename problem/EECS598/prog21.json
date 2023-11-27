@@ -1,6 +1,6 @@
 {
   "name": "prog21",
-  "program": "(MAP (HEAD input0))",
+  "program": "(ZIPWITH input0 input1 ^)",
   "examples": [
     {
       "input": [
@@ -8,6 +8,13 @@
         [3, 2, 1, 4]
       ],
       "output": [1, 16, 3, 16]
+    },
+    {
+      "input": [
+        [3, 5, 9, 1, 4],
+        [1, 2, 2, 100, 2]
+      ],
+      "output": [3, 25, 81, 1, 16]
     }
   ]
 }

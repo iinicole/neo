@@ -386,8 +386,6 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
         // if (depth == 0) {
         //     System.out.println("GeneratePermutations");
         //     System.out.println(Lists);
-        //     System.out.println(result);
-        //     System.out.println(nameNodes_);
         // }
 
         if(depth == Lists.size())
@@ -403,6 +401,12 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
             c.add(Lists.get(depth).get(i));
             GeneratePermutations(Lists, result, depth + 1, c);
         }
+
+        // if (depth == 0) {
+        //     System.out.println("GeneratePermutations");
+        //     System.out.println(Lists);
+        //     System.out.println(result);
+        // }
     }
 
     public boolean learnCoreLocal(List<Pair<Integer, List<String>>> core, int line) {
@@ -753,9 +757,9 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
     private void buildSATFormula() {
         // System.out.println("varNodes: " + varNodes_);
         // System.out.println("nameNodes_: " + nameNodes_);
-        for (Node node : nodes_) {
-            System.out.println(node + "id: " + node.id + " children size: " + node.children.size());
-        }
+        // for (Node node : nodes_) {
+        //     System.out.println(node + "id: " + node.id + " children size: " + node.children.size());
+        // }
         boolean conflict = false;
 
         // If a production is used in a parent node then this implies restrictions on the children
@@ -807,6 +811,7 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
                                 Pair<Integer, Production> pair = new Pair<Integer, Production>(node.children.get(i).id, pc);
                                 assert (varNodes_.containsKey(pair));
                                 // Parent restricts the domain of the child (positively)
+                                // System.out.println("positively: parent.id: " + node.id + " parent.prod: " + p.function + " child.id: " + node.children.get(i).id + " child.prod: " + pc.function);
                                 clause.push(varNodes_.get(pair));
                                 occurs.add(pc);
                             }
@@ -820,7 +825,9 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
 
                     for (Production pc : node.children.get(i).domain) {
                         if (!occurs.contains(pc)) {
+                            // System.out.println("id: " + node.children.get(i).id + " prod: " + pc + " occurs: " + occurs + " node.domain: " + node.children.get(i).domain);
                             VecInt lits = new VecInt(new int[]{-productionVar, -varNodes_.get(new Pair<Integer, Production>(node.children.get(i).id, pc))});
+                            // System.out.println("negatively: parent.id: " + node.id + " parent.prod: " + p.function + " child.id: " + node.children.get(i).id + " child.prod: " + pc.function);
                             // Parent restricts the domain of child (negatively)
                             conflict = satUtils_.addClause(lits);
                             assert(!conflict);
@@ -1438,7 +1445,7 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
                 decideDomain.add(p.function);
             }
         }
-        // System.out.println("level: " + level_ + " highTrail: " + highTrail_ + "decideDomain: " + decideDomain);
+        // System.out.println("original: " + node.domain + "\nhighTrail: " + highTrail_ + "\ndecideDomain: " + decideDomain);
         if (false) {
             System.out.println("node: " + node);
             System.out.println("DecideMap: " + decideMap);
@@ -1892,6 +1899,8 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
 
     public int convertLevelFromSATtoNeo(int lvl){
         int neo_lvl = lvl;
+        // System.out.println(currentSATLevel_);
+        // System.out.println(trailSAT_);
         for (int i = 0; i < currentSATLevel_.size(); i++){
             if (currentSATLevel_.get(i) == lvl){
                 neo_lvl = i;
@@ -2012,6 +2021,7 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
                     } else {
                         // No conflict
                         Node decision = decideHigh();
+                        // System.out.println("decideHigh: " + highTrail_ + " decision: " + decision + " level: " + level_);
 
                         if (level_ == -2){
                             // FIXME: quick hack to go to next sketch
@@ -2222,13 +2232,16 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
 //                    propagateTime_ += LibUtils.computeTime(s,e);
 
                     if (conflict != null) {
+                        // System.out.println(conflict);
                         int backjumpLevel = satUtils_.analyzeSATConflict(conflict);
                         int neoLevel = convertLevelFromSATtoNeo(backjumpLevel);
+                        // System.out.println(backjumpLevel + " " + neoLevel + " " + step2lvl_);
                         if (backjumpLevel == -1) {
                             unsat = true;
                             break;
                         } else backtrackStep2(neoLevel, false, false);
                         step_ = backtrackStep(neoLevel);
+                        // System.out.println(step_);
                         currentLine_ = trailNeo_.get(trailNeo_.size()-1).t1.t0;
                         currentChild_ = trailNeo_.get(trailNeo_.size()-1).t1.t1+1;
                         if (currentChild_ >= trail_.get(currentLine_).size()){
@@ -2333,7 +2346,7 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
                         } else {
                             if (highTrail_.get(currentLine_).t0.children.get(currentChild_).function.equals("")) {
                                 Node decision = decideFirst();
-                                // System.out.println("decideFirst highTrail: " + highTrail_ + " currentLine: " + currentLine_ + "currentChild: " + currentChild_ + " decision: " + decision);
+                                // System.out.println("decideFirst highTrail: " + highTrail_ + " currentLine: " + currentLine_ + " currentChild: " + currentChild_ + " decision: " + decision);
                                 if (decision == null) {
                                     // go back to step 2?
                                     step_ = 2;

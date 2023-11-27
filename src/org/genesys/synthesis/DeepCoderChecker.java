@@ -129,7 +129,21 @@ public class DeepCoderChecker implements Checker<Problem, List<Pair<Integer, Lis
                                 z3_.clearConflict();
                                 return false;
                             }
+                            List list = util_.getFlatList(obj);
+                            if (list.isEmpty()) {
+                                z3_.clearConflict();
+                                return false;
+                            }
+                            for (Object o : list) {
+                                if (o == null) {
+                                    z3_.clearConflict();
+                                    return false;
+                                }
+                            }
                         }
+
+                        
+
                         List<BoolExpr> abs = abstractDeepCode(worker, tgt.get());
                         if (abs.isEmpty()) {
                             z3_.clearConflict();

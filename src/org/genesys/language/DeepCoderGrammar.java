@@ -15,7 +15,7 @@ public class DeepCoderGrammar implements Grammar<AbstractType> {
 
     private int id = 1;
 
-    private int typeDist = 3;
+    private int typeDist = 5;
 
     public AbstractType inputType;
 
@@ -121,7 +121,6 @@ public class DeepCoderGrammar implements Grammar<AbstractType> {
             // else
             //     assert (false);
         }
-
         return productions;
     }
 
@@ -210,6 +209,7 @@ public class DeepCoderGrammar implements Grammar<AbstractType> {
         // productions.add(new Production<>(new BinopIntType(), "MAX"));
 
         productions.add(new Production<>(new FunctionType(new ArrayList<>(List.of(new IntType(), new IntType())), new IntType()), "+"));
+        productions.add(new Production<>(new FunctionType(new ArrayList<>(List.of(new IntType(), new IntType())), new IntType()), "-"));
         productions.add(new Production<>(new FunctionType(new ArrayList<>(List.of(new IntType(), new IntType())), new IntType()), "*"));
         productions.add(new Production<>(new FunctionType(new ArrayList<>(List.of(new IntType(), new IntType())), new IntType()), "/"));
         productions.add(new Production<>(new FunctionType(new ArrayList<>(List.of(new IntType(), new IntType())), new IntType()), "^"));

@@ -1,7 +1,7 @@
 {
   "id":5,
   "name":"MAXIMUM",
-  "type":"int",
+  "type":"list",
   "bit":"00011",
   "constraint":
   [

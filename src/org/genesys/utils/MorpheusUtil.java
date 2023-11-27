@@ -225,7 +225,7 @@ public class MorpheusUtil {
 
     }
 
-    private List getFlatList(Object obj) {
+    public List getFlatList(Object obj) {
         assert obj instanceof List;
         List aList = (List) obj;
         List flatList = new ArrayList();
