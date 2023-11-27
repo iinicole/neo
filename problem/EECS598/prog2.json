@@ -1,0 +1,14 @@
+{
+  "name": "prog2",
+  "program": "(MAP HEAD (GROUP input0))",
+  "examples": [
+    {
+      "input": [
+        [1, 1, 2, 2, 2, 2, 1, 1, 1]
+      ],
+      "output": [
+        1, 2, 1
+      ]
+    }
+  ]
+}
