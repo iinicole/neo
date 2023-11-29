@@ -1,6 +1,6 @@
 {
   "name": "prog22",
-  "program": "",
+  "program": "(HEAD (LAST input0))",
   "examples": [
     {
       "input": [
