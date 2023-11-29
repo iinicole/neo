@@ -46,7 +46,7 @@ public class DeepCoderSimplifier {
 
         // special simplification for COUNT
         // if result is always the same across all examples, then replace ast with result
-        if (ast.function.equals("COUNT")) {
+        if (ast.function.equals("COUNT") && examples_.size() > 1) {
             Integer result = (Integer) ast_results.get(0);
             boolean same = true;
             for (int i = 1; i < ast_results.size(); i++) {

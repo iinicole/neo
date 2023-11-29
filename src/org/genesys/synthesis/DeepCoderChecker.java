@@ -117,6 +117,7 @@ public class DeepCoderChecker implements Checker<Problem, List<Pair<Integer, Lis
                         Maybe<Object> tgt = interpreter_.execute(worker, inputs);
                         // System.out.println(func + " tgt:" + tgt.get());
                         if (!tgt.has()) {
+                            // System.out.println("FAIL worker:" + worker + " inputs: " + inputs);
                             z3_.clearConflict();
                             return false;
                         }

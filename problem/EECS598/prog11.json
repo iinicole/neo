@@ -1,6 +1,6 @@
 {
   "name": "prog11",
-  "program": "(ZIPWITH input0 input1 -)",
+  "program": "(ZIPWITH input0 input1 MAX)",
   "examples": [
     {
       "input": [
