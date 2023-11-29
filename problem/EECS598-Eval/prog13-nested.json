@@ -1,0 +1,12 @@
+{
+  "name": "prog18",
+  "program": "(GROUP (GROUP input0))",
+  "examples": [
+    {
+      "input": [
+        [1, 2, 3]
+      ],
+      "output": [[[1]], [[2]], [[3]]]
+    }
+  ]
+}

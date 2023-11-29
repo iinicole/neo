@@ -23,18 +23,41 @@ def run_test(folder_name, file_name, depth=3):
     if not os.path.exists(outputFolder):
         os.mkdir(outputFolder)
     
+    simplifyFolder = outputMainFolder + "Simplification" + '/'
+    simplifyFileName = folder_name + "-" + file_name.split('.')[0] + '.txt'
+    simplifyFile = simplifyFolder + simplifyFileName
+    if not os.path.exists(simplifyFolder):
+        os.mkdir(simplifyFolder)
+
+    nestedFolder = outputMainFolder + "Nested" + '/'
+    nestedFileName = folder_name + "-" + file_name.split('.')[0] + '.txt'
+    nestedFile = nestedFolder + nestedFileName
+    if not os.path.exists(nestedFolder):
+        os.mkdir(nestedFolder)
+    
     # subprocess run
     try:
         print(f'Running {base_cmd}', end='\t')
         res = subprocess.run(base_cmd, shell=True, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         print(f'Success')
-        with open(outputFile, 'w') as f:
-            f.write(res.stdout.decode('utf-8'))
-            f.write(res.stderr.decode('utf-8'))
+        stdout = res.stdout.decode('utf-8')
+        stderr = res.stderr.decode('utf-8')
     except subprocess.CalledProcessError as e:
         print(f'Error')
+        stdout = e.stdout.decode('utf-8')
+        stderr = e.stderr.decode('utf-8')
+    finally:
         with open(outputFile, 'w') as f:
-            f.write(e.stdout.decode('utf-8'))
+            f.write(stdout)
+            f.write(stderr)
+        if file_name.split('-')[1].startswith("simplify"):
+            with open(simplifyFile, 'w') as f:
+                f.write(stdout)
+                f.write(stderr)
+        elif file_name.split('-')[1].startswith("nested"):
+            with open(nestedFile, 'w') as f:
+                f.write(stdout)
+                f.write(stderr)
         
 
 if __name__ == '__main__':

@@ -1,0 +1,12 @@
+{
+  "name": "prog17",
+  "program": "(MAP-BINARY (FILTER (MAP-UNARY input0 HEAD_FUNCTION) l(a,b).(> a b) input1) 2 *)",
+  "examples": [
+    {
+      "input": [
+        [[123, 3291, 12], [43, 3, 123], [54, 321], [421, 3124], [5, 312], [432, 321], [5234, 32], [45, 3]], 100
+      ],
+      "output": [246, 842, 864, 10468]
+    }
+  ]
+}
