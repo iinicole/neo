@@ -452,6 +452,7 @@ public class Z3Utils {
                     }
                 }
                 if (!eq_vec.isEmpty())
+                    // System.out.println("EQ: " + key + " " + type + " " + eq_vec);
                     eq_map.put(new Pair<>(key, type), eq_vec);
             }
 

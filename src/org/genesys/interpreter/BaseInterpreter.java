@@ -63,6 +63,12 @@ public class BaseInterpreter implements Interpreter<Node, Object> {
             return m;
         } else {
             Maybe<Object> res = this.executors.get(node.function).execute(arglist, input);
+            // if (res.has()) {
+            //     System.out.println(node.function + "(" + arglist + ") " + input + " = " + res.get());
+            // }
+            // else {
+            //     System.out.println("BAD try to execute " + node + " on input " + input);
+            // }
             // System.out.println(node.function + "(" + arglist + ") " + input + " = " + res.get());
             // System.out.println("GOOD try to execute " + node + " on input " + input);
             return res;

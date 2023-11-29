@@ -18,10 +18,9 @@ public class MinimumUnop implements Unop {
             return null;
         }
         assert obj instanceof List : obj;
-        List<Integer> list = LibUtils.cast(obj);
         if (((List)obj).isEmpty()) return null;
         if (((List)obj).get(0) instanceof List) return null;
-
+        List<Integer> list = LibUtils.cast(obj);
         Optional<Integer> min = list.stream().reduce(Integer::min);
         return min.get();
     }

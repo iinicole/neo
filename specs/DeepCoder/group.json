@@ -1,7 +1,7 @@
 {
   "id":111,
   "name":"GROUP",
-  "type":"list",
+  "type":"list(list(T))",
   "bit":"11111",
   "constraint":
   [

@@ -1,7 +1,7 @@
 {
   "id":22,
   "name":"SORT",
-  "type":"list",
+  "type":"list(int)",
   "bit":"11111",
   "constraint":
   [

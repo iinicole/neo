@@ -1,7 +1,7 @@
 {
   "id":13,
   "name":"COUNT",
-  "type":"list",
+  "type":"int",
   "bit":"00100",
   "constraint":
   [

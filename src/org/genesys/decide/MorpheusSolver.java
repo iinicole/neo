@@ -330,6 +330,7 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
                         l.equals("ZIPWITH-MUL") ||
                         l.equals("ZIPWITH-MIN") ||
                         l.equals("ZIPWITH-MAX") ||
+                        l.equals("ZIPWITH") ||
                         l.equals("TAKE") ||
                         l.equals("DROP") ||
                         l.equals("ACCESS") ||

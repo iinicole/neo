@@ -30,7 +30,7 @@ public class FilterLList implements Unop {
         }
         List list = (List)  obj;
         if (list.isEmpty()) {
-            return list;
+            return null;
         } else {
             List targetList = new ArrayList<>();
             for (Object elem : list) {
@@ -59,6 +59,7 @@ public class FilterLList implements Unop {
                     }
                 }
             }
+            assert targetList.size() <= list.size();
             return targetList;
         }
     }

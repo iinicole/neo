@@ -1,7 +1,7 @@
 {
   "id":6,
   "name":"TAKE",
-  "type":"list",
+  "type":"list(T)",
   "bit":"11011",
   "constraint":
   [

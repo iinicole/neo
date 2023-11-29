@@ -1,6 +1,6 @@
 {
   "name": "prog15",
-  "program": "(HEAD (HEAD input0))",
+  "program": "(HEAD (HEAD input0))", 
   "examples": [
     {
       "input": [

@@ -1,7 +1,7 @@
 {
   "id":34,
   "name":"SUM",
-  "type":"list",
+  "type":"int",
   "bit":"00000",
   "constraint":
   [

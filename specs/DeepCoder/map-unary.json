@@ -1,7 +1,7 @@
 {
   "id":145,
   "name":"MAP-UNARY",
-  "type":"list",
+  "type":"list(T)",
   "bit":"11111",
   "constraint":
   [

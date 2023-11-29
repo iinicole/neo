@@ -1,14 +1,12 @@
 {
   "name": "prog4",
-  "program": "(HEAD (HEAD input0))",
+  "program": "(ZIPWITH (MAP input0 HEAD) (MAP input0 MAXIMUM) +)",
   "examples": [
     {
       "input": [
-        [[100], [1], [2], [2], [2], [2]]
+        [[1, 20, 3], [4, 52, 6], [7, 2, 99]]
       ],
-      "output": [
-        100
-      ]
+      "output": [21, 56, 106]
     }
   ]
 }

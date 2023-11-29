@@ -26,7 +26,7 @@ public class CountList implements Unop {
         List list = (List) obj;
         int cnt = 0;
         if (list.isEmpty()) {
-            return cnt;
+            return null;
         } else {
             for (Object elem : list) {
                 if (!(elem instanceof Integer)) {

@@ -1,7 +1,7 @@
 {
   "id":7,
   "name":"DROP",
-  "type":"list",
+  "type":"list(T)",
   "bit":"10100",
   "constraint":
   [

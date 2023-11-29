@@ -1,7 +1,7 @@
 {
   "id":23,
   "name":"REVERSE",
-  "type":"list",
+  "type":"list(T)",
   "bit":"11111",
   "constraint":
   [
