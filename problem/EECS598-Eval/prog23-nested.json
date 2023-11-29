@@ -1,0 +1,12 @@
+{
+  "name": "prog28",
+  "program": "(FILTER (MAP-BINARY input0 (MINIMUM input0) /) l(a,b).(> a b) input1)",
+  "examples": [
+    {
+      "input": [
+        [1823, 43, 53, 59, 52, 64, 2], 30
+      ],
+      "output": [911, 32]
+    }
+  ]
+}

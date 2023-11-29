@@ -1,0 +1,12 @@
+{
+  "name": "prog13",
+  "program": "(MAP ACCESS input0 2)",
+  "examples": [
+    {
+      "input": [
+        [[100, 2231, 3], [487, 5, 6, 7]]
+      ],
+      "output": [ 2231, 5 ]
+    }
+  ]
+}

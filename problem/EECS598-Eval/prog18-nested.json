@@ -1,0 +1,12 @@
+{
+  "name": "prog23",
+  "program": "(HEAD (HEAD input0))",
+  "examples": [
+    {
+      "input": [
+        [[10, 20, 5], [3, 4]]
+      ],
+      "output": 10
+    }
+  ]
+}

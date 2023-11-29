@@ -1,0 +1,14 @@
+{
+  "name": "prog11",
+  "program": "(ZIPWITH input0 input1 MAX)",
+  "examples": [
+    {
+      "input": [
+        [1, 2, 3, 4, 5, 6, 7], [2, 3, 9, 3, 2, 4, 1]
+      ],
+      "output": [
+        2, 3, 9, 4, 5, 6, 7
+      ]
+    }
+  ]
+}

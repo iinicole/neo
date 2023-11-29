@@ -1,0 +1,12 @@
+{
+  "name": "prog15",
+  "program": "(MAP-UNARY (MAP-UNARY input0 SORT_FUNCTION) GROUP_FUNCTION)", 
+  "examples": [
+    {
+      "input": [
+        [[100, 2, 3, 4, 4], [25, 40, 25, 12], [2, 2, 2, 4]]
+      ],
+      "output": [[[2], [3], [4, 4], [100]], [[12], [25, 25], [40]], [[2, 2, 2], [4]]]
+    }
+  ]
+}
