@@ -2127,9 +2127,9 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
                         */
 
                     }
-                    System.out.println("Sketch #iterations = " + iterations_ + " steps = " + step_);
+                    // System.out.println("Sketch #iterations = " + iterations_ + " steps = " + step_);
                     iterations_ = 0;
-                    System.out.println("Sketch #" + sketches_.size() + ": " + sketch);
+                    // System.out.println("Sketch #" + sketches_.size() + ": " + sketch);
                     // if (sketch.equals("MAP-UNARY MAP-BINARY MAP-UNARY ")) {
                     //     debug_ = true;
                     // }
@@ -2138,7 +2138,7 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
                     // }
                     // System.out.println("HighTrail: " + highTrail_);
                     //Z3Utils.getInstance().cleanCache();
-                    System.out.println("#constraints = " + SATUtils.getInstance().getSolver().nConstraints());
+                    // System.out.println("#constraints = " + SATUtils.getInstance().getSolver().nConstraints());
                 } else {
                     if (iterations_ > ITERATION_LIMIT){
                         // go to next sketch

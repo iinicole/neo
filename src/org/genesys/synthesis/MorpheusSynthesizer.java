@@ -46,6 +46,8 @@ public class MorpheusSynthesizer implements Synthesizer {
 
     private double totalDeduction = 0.0;
 
+    private double totalSimplification = 0.0;
+
     private HashMap<Integer, Component> components_ = new HashMap<>();
 
     private Gson gson = new Gson();
@@ -204,7 +206,10 @@ public class MorpheusSynthesizer implements Synthesizer {
 
                 if (isCorrect) {
                     System.out.println("Synthesized PROGRAM: " + ast);
+                    long simplifyStart = LibUtils.tick();
                     DeepCoderSimplifier simplifier = new DeepCoderSimplifier(interpreter_, problem_.getExamples());
+                    long simplifyEnd = LibUtils.tick();
+                    totalSimplification += LibUtils.computeTime(simplifyStart, simplifyEnd);
                     Node simplified = simplifier.simplify(ast);
                     System.out.println("Simplified PROGRAM: " + simplified);
                     foundProgram = true;
@@ -226,6 +231,7 @@ public class MorpheusSynthesizer implements Synthesizer {
         System.out.println("Search time=:" + (totalSearch));
         System.out.println("Deduction time=:" + (totalDeduction));
         System.out.println("Test time=:" + (totalTest));
+        System.out.println("Simplification time=:" + (totalSimplification));
         System.out.println("Synthesis time: " + LibUtils.computeTime(startSynth, endSynth));
         System.out.println("Total=:" + total);
         System.out.println("Prune partial=:" + prune_partial + " %=:" + prune_partial * 100.0 / partial);
