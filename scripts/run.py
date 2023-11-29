@@ -12,6 +12,9 @@ def run_all_tests(folder_name):
 
     # run all files in the folder
     for f in sorted(files):
+        # if file ends with .json
+        if not f.endswith('.json'):
+            continue
         run_test(folder_name, f)
 
 def run_test(folder_name, file_name, depth=3):
