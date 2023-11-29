@@ -89,7 +89,7 @@ public class DeepCoderChecker implements Checker<Problem, List<Pair<Integer, Lis
             String func = worker.function;
             //Get component spec.
             Component comp = components_.get(func);
-           System.out.println("working on : " + worker + " id:" + worker.id + " isconcrete:" + worker.isConcrete());
+        //    System.out.println("working on : " + worker + " id:" + worker.id + " isconcrete:" + worker.isConcrete());
             if ("root".equals(func)) {
                 List<BoolExpr> abs = abstractDeepCode(worker, output);
                 List<BoolExpr> align = alignOutput(worker);
@@ -108,9 +108,9 @@ public class DeepCoderChecker implements Checker<Problem, List<Pair<Integer, Lis
                 cstList.addAll(abs);
             } else {
                 if (!worker.children.isEmpty() && comp != null) {
-                    System.out.println("worker:" + worker + "curr:" + curr + "comp:" + comp);
+                    // System.out.println("worker:" + worker + "curr:" + curr + "comp:" + comp);
                     if ((curr != null) && (worker.id == curr.id)) {
-                        System.out.println("worker:" + worker + " inputs: " + inputs);
+                        // System.out.println("worker:" + worker + " inputs: " + inputs);
                         Maybe<Object> tgt = interpreter_.execute(worker, inputs);
                         if (!tgt.has()) {
                             z3_.clearConflict();
