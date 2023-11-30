@@ -1,12 +1,12 @@
 {
   "name": "prog18",
-  "program": "(GROUP (GROUP input0))",
+  "program": "(GROUP input0)",
   "examples": [
     {
       "input": [
-        [1, 2, 3]
+        [1, 1, 2, 3, 4, 4, 5, 6, 9, 12, 62], 4
       ],
-      "output": [[[1]], [[2]], [[3]]]
+      "output": [[0, 0, 0, 0], [1, 1, 1, 1], [2], [3], [15]]
     }
   ]
 }
