@@ -1,4 +1,3 @@
-
 package org.genesys.synthesis;
 
 import java.util.ArrayList;
@@ -79,7 +78,7 @@ public class DeepCoderSimplifier {
                 Set<Node> same_result = new HashSet<>();
                 for (int j = 0; j < examples_.size(); j++) {
                     if (child_result.get(j).containsKey(ast_results.get(j))) {
-                        if (same_result.isEmpty()) {
+                        if (j == 0) {
                             same_result.addAll(child_result.get(j).get(ast_results.get(j)));
                         } else {
                             same_result.retainAll(child_result.get(j).get(ast_results.get(j)));
