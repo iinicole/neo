@@ -2050,11 +2050,11 @@ public class MorpheusSolver implements AbstractSolver<BoolExpr, Pair<Node,Node>>
                         */
 
                     }
-                    System.out.println("Sketch #iterations = " + iterations_);
+                    // System.out.println("Sketch #iterations = " + iterations_);
                     iterations_ = 0;
-                    System.out.println("Sketch #" + sketches_.size() + ": " + sketch);
+                    // System.out.println("Sketch #" + sketches_.size() + ": " + sketch);
                     //Z3Utils.getInstance().cleanCache();
-                    System.out.println("#constraints = " + SATUtils.getInstance().getSolver().nConstraints());
+                    // System.out.println("#constraints = " + SATUtils.getInstance().getSolver().nConstraints());
                 } else {
                     if (iterations_ > ITERATION_LIMIT){
                         // go to next sketch
