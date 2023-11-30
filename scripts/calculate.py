@@ -27,7 +27,7 @@ def calculate(folder_name):
                 if "Simplification time" in line:
                     all_simplified_times.append(float(line.split("=:")[-1]))
             if synthesized is not None and simplified is not None:
-                if synthesized == simplified:
+                if synthesized != simplified:
                     success_simplified_times.append(all_simplified_times[-1])
             else:
                 raise Exception(f"Synthesized or simplified is None: {synthesized}, {simplified} for file {file_path}")
@@ -47,7 +47,8 @@ def calculate(folder_name):
         num += 1
     
     print(f"{folder_name} mean: {statistics.mean(times)} median: {statistics.median(times)} (Total: {sum(times)}, Num: {num})")
-    print(f"Number of simplified: {len(success_simplified_times)} mean: {statistics.mean(success_simplified_times)} median: {statistics.median(success_simplified_times)} (Total: {sum(success_simplified_times)}, Num: {len(success_simplified_times)})")
+    print(f"Total simplification stats= mean: {statistics.mean(all_simplified_times)} median: {statistics.median(all_simplified_times)} (Total: {sum(all_simplified_times)}, Num: {len(all_simplified_times)})")
+    print(f"Number of success simplified: {len(success_simplified_times)} mean: {statistics.mean(success_simplified_times)} median: {statistics.median(success_simplified_times)} (Total: {sum(success_simplified_times)}, Num: {len(success_simplified_times)})")
         
 
 if __name__ == '__main__':
