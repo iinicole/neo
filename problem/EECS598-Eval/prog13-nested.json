@@ -1,6 +1,6 @@
 {
-  "name": "prog18",
-  "program": "(GROUP input0)",
+  "name": "prog13",
+  "program": "(GROUP (MAP-BINARY input0 input1 /))",
   "examples": [
     {
       "input": [
