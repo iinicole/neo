@@ -46,6 +46,8 @@ public class MorpheusSynthesizer implements Synthesizer {
 
     private double totalDeduction = 0.0;
 
+    private double totalSimplification = 0.0;
+
     private HashMap<Integer, Component> components_ = new HashMap<>();
 
     private Gson gson = new Gson();
@@ -76,6 +78,7 @@ public class MorpheusSynthesizer implements Synthesizer {
 
     public MorpheusSynthesizer(Grammar grammar, Problem problem, Checker checker, Interpreter interpreter, int depth, String specLoc, boolean learning, Decider decider) {
         learning_ = learning;
+        System.out.println("GRAMMAR:" + grammar.getProductions());
         solver_ = new MorpheusSolver(grammar, depth, decider, learning);
         checker_ = checker;
         interpreter_ = interpreter;
@@ -92,6 +95,7 @@ public class MorpheusSynthesizer implements Synthesizer {
                 e.printStackTrace();
             }
             components_.put(comp.getId(), comp);
+            // System.out.println("component: " + comp);
         }
         //init equivalent class map
         Z3Utils.getInstance().initEqMap(components_.values());
@@ -111,22 +115,25 @@ public class MorpheusSynthesizer implements Synthesizer {
         int partial = 0;
         Set<String> coreCache_ = new HashSet<>();
         //Set<String> coreAst_ = new HashSet<>();
+        boolean foundProgram = false;
 
         while (ast != null) {
+            // System.out.println("THIS IS AST: " + ast);
             /* do deduction */
             total++;
             if (solver_.isPartial()) partial++;
             else concrete++;
 
-            //System.out.println("Checking Program: " + ast);
+            // System.out.println("Checking Program: " + ast);
             long start = LibUtils.tick();
             boolean isSatisfiable = true;
             // This trick does not work well in Morpheus!
+            // System.out.println("AST: " + ast + " isPartial: " + solver_.isPartial() + "morphues: " + (checker_ instanceof MorpheusChecker) + " isSatisfiable: " + isSatisfiable);
             if (solver_.isPartial())
                 isSatisfiable = checker_.check(problem_, ast, curr);
             else {
-                if (checker_ instanceof MorpheusChecker)
-                    isSatisfiable = checker_.check(problem_, ast, curr);
+                // if (checker_ instanceof MorpheusChecker)
+                //     isSatisfiable = checker_.check(problem_, ast, curr);
             }
             long end = LibUtils.tick();
             totalDeduction += LibUtils.computeTime(start, end);
@@ -150,6 +157,7 @@ public class MorpheusSynthesizer implements Synthesizer {
                             coreCache_.add(conflictsType.toString());
                         }
                     } else {
+                        // System.out.println("conflicts: " + conflicts);
                         if (conflicts.isEmpty()) {
                             astPair = solver_.getModel(null, true);
                             if (astPair == null) break;
@@ -198,6 +206,13 @@ public class MorpheusSynthesizer implements Synthesizer {
 
                 if (isCorrect) {
                     System.out.println("Synthesized PROGRAM: " + ast);
+                    long simplifyStart = LibUtils.tick();
+                    DeepCoderSimplifier simplifier = new DeepCoderSimplifier(interpreter_, problem_.getExamples());
+                    long simplifyEnd = LibUtils.tick();
+                    totalSimplification += LibUtils.computeTime(simplifyStart, simplifyEnd);
+                    Node simplified = simplifier.simplify(ast);
+                    System.out.println("Simplified PROGRAM: " + simplified);
+                    foundProgram = true;
                     break;
                 } else {
                     long start3 = LibUtils.tick();
@@ -216,6 +231,7 @@ public class MorpheusSynthesizer implements Synthesizer {
         System.out.println("Search time=:" + (totalSearch));
         System.out.println("Deduction time=:" + (totalDeduction));
         System.out.println("Test time=:" + (totalTest));
+        System.out.println("Simplification time=:" + (totalSimplification));
         System.out.println("Synthesis time: " + LibUtils.computeTime(startSynth, endSynth));
         System.out.println("Total=:" + total);
         System.out.println("Prune partial=:" + prune_partial + " %=:" + prune_partial * 100.0 / partial);
@@ -225,7 +241,9 @@ public class MorpheusSynthesizer implements Synthesizer {
         System.out.println("SMT:" + smt1);
         System.out.println("Type:" + typeinhabit);
 
-        return ast;
+        if (foundProgram)
+            return ast;
+        throw new RuntimeException("Not Found");
     }
 
     /* Verify the program using I-O examples. */
@@ -239,15 +257,18 @@ public class MorpheusSynthesizer implements Synthesizer {
             // Always one output table
             Object output = LibUtils.fixGsonBug(example.getOutput());
             try {
+                // System.out.println("input: " + input);
+                // System.out.println("PROGRAM: " + program);
                 Maybe<Object> tgt = interpreter_.execute(program, input);
                 if (tgt == null) {
                     passed = false;
                     break;
                 }
-
-//                System.out.println("result target:\n" + ((SimpleDataFrame)tgt.get()).getCols());
+                // System.out.println("target: " + tgt.get());
+                // System.out.println("output: " + output);
+            //    System.out.println("result target:\n" + ((SimpleDataFrame)tgt.get()).getCols());
 //                Extensions.print((SimpleDataFrame)tgt.get());
-//                System.out.println("expected target:\n" + ((SimpleDataFrame)output).getCols());
+            //    System.out.println("expected target:\n" + ((SimpleDataFrame)output).getCols());
 //                Extensions.print((SimpleDataFrame)output);
 
                 if (output instanceof DataFrame) {
