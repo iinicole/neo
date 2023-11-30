@@ -47,7 +47,7 @@ def calculate(folder_name):
         num += 1
     
     print(f"{folder_name} mean: {statistics.mean(times)} median: {statistics.median(times)} (Total: {sum(times)}, Num: {num})")
-    print(f"Number of simplified: {len(success_simplified_times)}")
+    print(f"Number of simplified: {len(success_simplified_times)} mean: {statistics.mean(success_simplified_times)} median: {statistics.median(success_simplified_times)} (Total: {sum(success_simplified_times)}, Num: {len(success_simplified_times)})")
         
 
 if __name__ == '__main__':
